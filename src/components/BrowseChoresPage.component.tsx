@@ -3,15 +3,15 @@ import { User } from "@supabase/supabase-js";
 import supabase from "../utils/supabase";
 import { Chore } from "../models";
 
-export interface MyChoresPageProps {
+export interface BrowseChoresPageProps {
   user?: User;
 }
 
-const MyChoresPage: React.FC<MyChoresPageProps> = ({ user }) => {
+const BrowseChoresPage: React.FC<BrowseChoresPageProps> = ({ user }) => {
   const [chores, setChores] = useState<Chore[]>([]);
 
   const fetchChores = useCallback(async () => {
-    const { data, error } = await supabase.from("chore").select().eq("user_id", user?.id);
+    const { data, error } = await supabase.from("chore").select().neq("user_id", user?.id);
 
     if (!error) {
       setChores(data as Chore[]);
@@ -24,15 +24,6 @@ const MyChoresPage: React.FC<MyChoresPageProps> = ({ user }) => {
     fetchChores();
   }, [fetchChores]);
 
-  const deleteHandler = async (id: string) => {
-    try {
-      await supabase.from("chore").delete().eq('id', id);
-      await fetchChores();
-    } catch (error) {
-      console.error("Error deleting chore:", id, error);
-    }
-  }
-
   return (
     <>
       <h1>{user ? `${user.email} - ` : ""}Choredos</h1>
@@ -40,7 +31,6 @@ const MyChoresPage: React.FC<MyChoresPageProps> = ({ user }) => {
         chores &&
         chores.map((c, index) => (
           <div className="card" key={index}>
-            <button onClick={() => deleteHandler(c.id)}>X</button>
             <h2>Name: {c.name}</h2>
             <p>Frequency: {c.frequency_days} days</p>
             <p>Last Completed: {c.completed_on}</p>
@@ -53,4 +43,4 @@ const MyChoresPage: React.FC<MyChoresPageProps> = ({ user }) => {
   );
 };
 
-export default MyChoresPage;
+export default BrowseChoresPage;

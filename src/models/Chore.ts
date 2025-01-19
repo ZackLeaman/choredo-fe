@@ -4,4 +4,5 @@ export interface Chore {
   description: string;
   completed_on: string;
   frequency_days: number;
+  public?: boolean;
 }

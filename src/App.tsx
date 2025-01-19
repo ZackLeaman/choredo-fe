@@ -8,6 +8,7 @@ import NavigationBar from "./components/NavigationBar.component";
 import { createClient, Session } from "@supabase/supabase-js";
 import supabase from "./utils/supabase";
 import { v4 as uuidv4 } from 'uuid';
+import BrowseChoresPage from "./components/BrowseChoresPage.component";
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -50,7 +51,7 @@ function App() {
       <NavigationBar logout={signOut} />
       <Routes>
         <Route path="/" element={<MyChoresPage user={user} />} />
-        {/* <Route path="/chores" element={} /> */}
+        <Route path="/chores" element={<BrowseChoresPage user={user} />} />
         <Route path="/create-chore" element={<EditChoresPage />} />
         {
           <Route

@@ -12,6 +12,7 @@ interface IEditChoreInput {
   name: string;
   description: string;
   frequencyDays: number;
+  isPrivate: boolean;
   completedOn?: string;
   // tags: string;
 }
@@ -24,6 +25,7 @@ const defaultFormValue = {
   description: "",
   frequency_days: 1,
   completed_on: todaysDate.toISOString().split("T")[0],
+  isPrivate: true,
   // tags: "",
 };
 
@@ -35,6 +37,7 @@ const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
           description: chore.description,
           completedOn: chore.completed_on,
           frequencyDays: chore.frequency_days,
+          isPrivate: chore.public ? !chore.public : true,
           // tags: chore.tags.join(", "),
         }
       : { ...defaultFormValue },
@@ -49,6 +52,7 @@ const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
             description: chore.description,
             completedOn: chore.completed_on,
             frequencyDays: chore.frequency_days,
+            isPrivate: chore.public ? !chore.public : true,
             // tags: chore.tags.join(", "),
           }
         : { ...defaultFormValue }
@@ -63,6 +67,7 @@ const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
         description: data.description,
         completed_on: data.completedOn,
         frequency_days: data.frequencyDays,
+        public: !data.isPrivate,
       }).eq('id', chore.id).then((data, error) => {
         if (error) {
           throw new Error(error);
@@ -76,6 +81,7 @@ const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
         description: data.description,
         completed_on: data.completedOn,
         frequency_days: data.frequencyDays,
+        public: !data.isPrivate,
       }).then((data, error) => {
         if (error) {
           throw new Error(error);
@@ -124,6 +130,15 @@ const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
             {...register("completedOn")}
             type="date"
             className="text-right p-2"
+          />
+        </div>
+        <div className="flex flex-nowrap gap-2 justify-between">
+          <label htmlFor="isPrivate">Private</label>
+          <input
+            id="isPrivate"
+            {...register("isPrivate")}
+            type="checkbox"
+            className="p-2"
           />
         </div>
         <div className="flex flex-col flex-nowrap gap-2">
