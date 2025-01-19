@@ -1,6 +1,8 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Chore } from "../models/Chore";
 import { useEffect } from "react";
+import supabase from "../utils/supabase";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface EditChoresPageProps {
   chore?: Chore;
@@ -10,8 +12,8 @@ interface IEditChoreInput {
   name: string;
   description: string;
   frequencyDays: number;
-  tags: string;
   completedOn?: string;
+  // tags: string;
 }
 
 const todaysDate = new Date();
@@ -20,24 +22,20 @@ todaysDate.setHours(0, 0, 0, 0);
 const defaultFormValue = {
   name: "",
   description: "",
-  frequencyDays: 1,
-  tags: "",
-  completedOn: todaysDate.toISOString().split("T")[0],
+  frequency_days: 1,
+  completed_on: todaysDate.toISOString().split("T")[0],
+  // tags: "",
 };
 
 const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
-  if (chore) {
-    chore.completedOn.setHours(0, 0, 0, 0);
-  }
-
   const { register, handleSubmit, reset } = useForm<IEditChoreInput>({
     defaultValues: chore
       ? {
           name: chore.name,
           description: chore.description,
-          completedOn: chore.completedOn.toISOString().split("T")[0],
-          frequencyDays: chore.frequencyDays,
-          tags: chore.tags.join(", "),
+          completedOn: chore.completed_on,
+          frequencyDays: chore.frequency_days,
+          // tags: chore.tags.join(", "),
         }
       : { ...defaultFormValue },
   });
@@ -49,17 +47,42 @@ const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
         ? {
             name: chore.name,
             description: chore.description,
-            completedOn: chore.completedOn.toISOString().split("T")[0],
-            frequencyDays: chore.frequencyDays,
-            tags: chore.tags.join(", "),
+            completedOn: chore.completed_on,
+            frequencyDays: chore.frequency_days,
+            // tags: chore.tags.join(", "),
           }
         : { ...defaultFormValue }
     );
   }, [reset, chore]);
 
   const onSubmitHandler: SubmitHandler<IEditChoreInput> = (data) => {
-    // e?.preventDefault();
-    console.log("HEYO", data);
+    console.log("SUBMIT PRESSED")
+    if (chore) {
+      supabase.from('chore').update({
+        name: data.name,
+        description: data.description,
+        completed_on: data.completedOn,
+        frequency_days: data.frequencyDays,
+      }).eq('id', chore.id).then((data, error) => {
+        if (error) {
+          throw new Error(error);
+        }
+        console.log("UPDATE DATA", data);
+      }).catch((e) => console.log(e));
+    } else {
+      supabase.from('chore').insert({
+        id: uuidv4(),
+        name: data.name,
+        description: data.description,
+        completed_on: data.completedOn,
+        frequency_days: data.frequencyDays,
+      }).then((data, error) => {
+        if (error) {
+          throw new Error(error);
+        }
+        console.log("INSERT DATA", data);
+      }).catch((e) => console.log(e));
+    }
   };
 
   return (
@@ -113,12 +136,12 @@ const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
             className="p-2"
           />
         </div>
-        <div className="flex flex-col flex-nowrap gap-2">
+        {/* <div className="flex flex-col flex-nowrap gap-2">
           <label htmlFor="tags" className="self-start">
             Tags (comma separated)
           </label>
           <textarea id="tags" {...register("tags")} className="p-2" />
-        </div>
+        </div> */}
         <button type="submit" className="bg-lime-600 mt-4">
           Submit
         </button>

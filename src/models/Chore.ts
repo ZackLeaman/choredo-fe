@@ -1,8 +1,7 @@
 export interface Chore {
-  id: number;
+  id: string;
   name: string;
   description: string;
-  completedOn: Date;
-  frequencyDays: number;
-  tags: string[];
+  completed_on: string;
+  frequency_days: number;
 }
