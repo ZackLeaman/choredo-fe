@@ -1,12 +1,16 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Chore } from "../models/Chore";
 import { useEffect } from "react";
-import supabase from "../utils/supabase";
-import { v4 as uuidv4 } from 'uuid';
-
-export interface EditChoresPageProps {
-  chore?: Chore;
-}
+import { v4 as uuidv4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createChore,
+  resetStatus,
+  selectEditChore,
+  selectStatus,
+  updateChore,
+} from "../slices/choreSlice";
+import { AsyncStatus } from "../enums/AsyncStatus";
+import { useNavigate } from "react-router";
 
 interface IEditChoreInput {
   name: string;
@@ -29,7 +33,12 @@ const defaultFormValue = {
   // tags: "",
 };
 
-const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
+const EditChoresPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const chore = useSelector(selectEditChore);
+  const status = useSelector(selectStatus);
+  const navigate = useNavigate();
+
   const { register, handleSubmit, reset } = useForm<IEditChoreInput>({
     defaultValues: chore
       ? {
@@ -59,35 +68,45 @@ const EditChoresPage: React.FC<EditChoresPageProps> = ({ chore }) => {
     );
   }, [reset, chore]);
 
+  useEffect(() => {
+    if (
+      status.createChore === AsyncStatus.SUCCESSFUL ||
+      status.updateChore === AsyncStatus.SUCCESSFUL
+    ) {
+      dispatch(resetStatus());
+      navigate("/");
+    }
+  }, [status, navigate, dispatch]);
+
   const onSubmitHandler: SubmitHandler<IEditChoreInput> = (data) => {
-    console.log("SUBMIT PRESSED")
+    console.log("SUBMIT PRESSED");
+    dispatch(resetStatus());
     if (chore) {
-      supabase.from('chore').update({
-        name: data.name,
-        description: data.description,
-        completed_on: data.completedOn,
-        frequency_days: data.frequencyDays,
-        public: !data.isPrivate,
-      }).eq('id', chore.id).then((data, error) => {
-        if (error) {
-          throw new Error(error);
-        }
-        console.log("UPDATE DATA", data);
-      }).catch((e) => console.log(e));
+      dispatch(
+        updateChore({
+          chore: {
+            id: chore.id,
+            name: data.name,
+            description: data.description,
+            completed_on: data.completedOn ?? defaultFormValue.completed_on,
+            frequency_days: data.frequencyDays,
+            public: !data.isPrivate,
+          },
+        }) as any
+      );
     } else {
-      supabase.from('chore').insert({
-        id: uuidv4(),
-        name: data.name,
-        description: data.description,
-        completed_on: data.completedOn,
-        frequency_days: data.frequencyDays,
-        public: !data.isPrivate,
-      }).then((data, error) => {
-        if (error) {
-          throw new Error(error);
-        }
-        console.log("INSERT DATA", data);
-      }).catch((e) => console.log(e));
+      dispatch(
+        createChore({
+          chore: {
+            id: uuidv4(),
+            name: data.name,
+            description: data.description,
+            completed_on: data.completedOn ?? defaultFormValue.completed_on,
+            frequency_days: data.frequencyDays,
+            public: !data.isPrivate,
+          },
+        }) as any
+      );
     }
   };
 

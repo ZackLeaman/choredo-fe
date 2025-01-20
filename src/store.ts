@@ -5,9 +5,10 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { userSlice } from "./slices/userSlice";
+import { choreSlice } from "./slices/choreSlice";
+// import { userSlice } from "./slices/userSlice";
 
-const rootReducer = combineSlices(userSlice);
+const rootReducer = combineSlices(choreSlice);
 
 export type RootState = ReturnType<typeof rootReducer>;
 

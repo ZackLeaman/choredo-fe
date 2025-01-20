@@ -5,12 +5,14 @@ import LoginPage from "./components/LoginPage.component";
 import MyChoresPage from "./components/MyChoresPage.component";
 import EditChoresPage from "./components/EditChoresPage.component";
 import NavigationBar from "./components/NavigationBar.component";
-import { createClient, Session } from "@supabase/supabase-js";
+import { Session } from "@supabase/supabase-js";
 import supabase from "./utils/supabase";
-import { v4 as uuidv4 } from 'uuid';
 import BrowseChoresPage from "./components/BrowseChoresPage.component";
+import { useSelector } from "react-redux";
+import { selectEditChore } from "./slices/choreSlice";
 
 function App() {
+  const editChore = useSelector(selectEditChore);
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
@@ -38,41 +40,27 @@ function App() {
   const user = session?.user;
   console.log("HEYO SETTING USER", session, user);
 
-  if (!session) {
+  if (user) {
     return (
-      <Routes>
-        <Route path="*" element={<LoginPage />} />
-      </Routes>
+      <>
+        <NavigationBar logout={signOut} />
+        <Routes>
+          <Route path="/" element={<MyChoresPage user={user} />} />
+          <Route path="/chores" element={<BrowseChoresPage user={user} />} />
+          <Route path="/create-chore" element={<EditChoresPage />} />
+          {
+            editChore && <Route path="/edit-chore" element={<EditChoresPage />} />
+          }
+          <Route path="*" element={<div>404 Not Found.</div>} />
+        </Routes>
+      </>
     );
   }
 
   return (
-    <>
-      <NavigationBar logout={signOut} />
-      <Routes>
-        <Route path="/" element={<MyChoresPage user={user} />} />
-        <Route path="/chores" element={<BrowseChoresPage user={user} />} />
-        <Route path="/create-chore" element={<EditChoresPage />} />
-        {
-          <Route
-            path="/edit-chore"
-            element={
-              <EditChoresPage
-                chore={{
-                  id: uuidv4(),
-                  name: "MY EDIT CHORE WOW",
-                  description: "My edit chore description here",
-                  frequency_days: 6,
-                  completed_on: (new Date()).toISOString().split('T')[0],
-                  // tags: ["lawn care", "mowing", "something else"],
-                }}
-              />
-            }
-          />
-        }
-        {/* <Route path="*" element={<NotFoundPage />} /> */}
-      </Routes>
-    </>
+    <Routes>
+      <Route path="*" element={<LoginPage />} />
+    </Routes>
   );
 }
 
