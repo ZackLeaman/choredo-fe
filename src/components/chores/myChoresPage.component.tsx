@@ -1,45 +1,43 @@
 import { useEffect } from "react";
-import { User } from "@supabase/supabase-js";
 import {
   deleteChore,
-  editChore,
   fetchUserChores,
   resetStatus,
-  selectStatus,
+  selectChoreStatus,
   selectUserChores,
-} from "../slices/choreSlice";
+} from "../../slices/choreSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncStatus } from "../enums/AsyncStatus";
-import { Chore } from "../models";
+import { AsyncStatus } from "../../enums/asyncStatus";
+import { Chore } from "../../models";
 import { useNavigate } from "react-router";
+import { selectUser } from "../../slices";
 
-export interface MyChoresPageProps {
-  user: User;
-}
-
-const MyChoresPage: React.FC<MyChoresPageProps> = ({ user }) => {
+const MyChoresPage: React.FC = () => {
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const chores = useSelector(selectUserChores);
-  const status = useSelector(selectStatus);
+  const status = useSelector(selectChoreStatus);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dispatch(fetchUserChores({ user }) as any);
   }, [dispatch, user]);
 
   useEffect(() => {
     if (status.deleteChore === AsyncStatus.SUCCESSFUL) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       dispatch(fetchUserChores({ user }) as any);
       dispatch(resetStatus());
     }
   }, [dispatch, user, status]);
 
   const editHandler = (chore: Chore) => {
-    dispatch(editChore(chore) as any);
-    navigate("/edit-chore");
+    navigate(`/edit-chore/${chore.id}`);
   };
 
   const deleteHandler = (id: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dispatch(deleteChore({ id }) as any);
   };
 

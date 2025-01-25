@@ -1,14 +1,10 @@
-import { useDispatch } from "react-redux";
 import { NavLink } from "react-router";
-import { editChore } from "../slices/choreSlice";
 
 export interface NavigationBarProps {
   logout: () => void;
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ logout }) => {
-  const dispatch = useDispatch();
-
   return (
     <nav className="flex gap-9 items-center mb-5">
       <NavLink
@@ -28,7 +24,6 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ logout }) => {
       <NavLink
         to="/create-chore"
         end
-        onClick={() => dispatch(editChore(null))}
         className={({ isActive }) => (isActive ? "text-lime-500" : "")}
       >
         Create a Chore

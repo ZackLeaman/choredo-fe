@@ -1,17 +1,15 @@
 import { useEffect } from "react";
-import { User } from "@supabase/supabase-js";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPublicChores, selectPublicChores } from "../slices/choreSlice";
+import { fetchPublicChores, selectPublicChores } from "../../slices/choreSlice";
+import { selectUser } from "../../slices";
 
-export interface BrowseChoresPageProps {
-  user: User;
-}
-
-const BrowseChoresPage: React.FC<BrowseChoresPageProps> = ({ user }) => {
+const BrowseChoresPage: React.FC = () => {
   const dispatch = useDispatch();
+  const user = useSelector(selectUser);
   const chores = useSelector(selectPublicChores);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dispatch(fetchPublicChores({ user }) as any);
   }, [dispatch, user]);
 

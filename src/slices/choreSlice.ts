@@ -1,32 +1,21 @@
-import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { createAppSlice } from "../createAppSlice";
-import { AsyncStatus } from "../enums/AsyncStatus";
-import { Chore } from "../models";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAppSlice } from "../store/createAppSlice";
+import { AsyncStatus } from "../enums/asyncStatus";
+import { Chore, ChoreStateData, ChoreStatus } from "../models";
 import { User } from "@supabase/supabase-js";
-import supabase from "../utils/supabase";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
+import MockChores from "../data/chores";
 
 export interface ChoresSliceState {
-  data: {
-    userChores: Chore[];
-    publicChores: Chore[];
-    editChore: Chore | null;
-  };
-  status: {
-    fetchUserChores: AsyncStatus;
-    fetchPublicChores: AsyncStatus;
-    createChore: AsyncStatus;
-    updateChore: AsyncStatus;
-    deleteChore: AsyncStatus;
-  };
-  error: string | null;
+  data: ChoreStateData;
+  status: ChoreStatus;
+  error: string;
 }
 
 const initialState: ChoresSliceState = {
   data: {
     userChores: [],
     publicChores: [],
-    editChore: null,
   },
   status: {
     fetchUserChores: AsyncStatus.NONE,
@@ -35,23 +24,23 @@ const initialState: ChoresSliceState = {
     updateChore: AsyncStatus.NONE,
     deleteChore: AsyncStatus.NONE,
   },
-  error: null,
+  error: "",
 };
 
 export const fetchUserChores = createAsyncThunk<Chore[], { user: User }>(
   "chore/fetchUserChores",
   async ({ user }, { rejectWithValue }) => {
     try {
-      const { data, error } = await supabase
-        .from("chore")
-        .select()
-        .eq("user_id", user.id);
+      // const { data, error } = await supabase
+      //   .from("chore")
+      //   .select()
+      //   .eq("user_id", user.id);
 
-      if (error) {
-        throw new Error(error.message);
-      }
+      // if (error) {
+      //   throw new Error(error.message);
+      // }
 
-      return data as Chore[];
+      return MockChores.filter((c) => !c.public);
     } catch (error: unknown) {
       console.error("Error fetching user chores", error);
       return rejectWithValue(error);
@@ -63,16 +52,16 @@ export const fetchPublicChores = createAsyncThunk<Chore[], { user: User }>(
   "chore/fetchPublicChores",
   async ({ user }, { rejectWithValue }) => {
     try {
-      const { data, error } = await supabase
-        .from("chore")
-        .select()
-        .neq("user_id", user.id);
+      // const { data, error } = await supabase
+      //   .from("chore")
+      //   .select()
+      //   .neq("user_id", user.id);
 
-      if (error) {
-        throw new Error(error.message);
-      }
+      // if (error) {
+      //   throw new Error(error.message);
+      // }
 
-      return data as Chore[];
+      return MockChores.filter((c) => c.public);
     } catch (error: unknown) {
       console.error("Error fetching public chores", error);
       return rejectWithValue(error);
@@ -83,64 +72,67 @@ export const fetchPublicChores = createAsyncThunk<Chore[], { user: User }>(
 export const updateChore = createAsyncThunk<void, { chore: Partial<Chore> }>(
   "chore/updateChore",
   async ({ chore }, { rejectWithValue }) => {
-    try {
-      const { error } = await supabase
-        .from("chore")
-        .update({
-          name: chore.name,
-          description: chore.description,
-          completed_on: chore.completed_on,
-          frequency_days: chore.frequency_days,
-          public: chore.public,
-        })
-        .eq("id", chore.id);
+    // try {
+    //   const { error } = await supabase
+    //     .from("chore")
+    //     .update({
+    //       name: chore.name,
+    //       description: chore.description,
+    //       completed_on: chore.completed_on,
+    //       frequency_days: chore.frequency_days,
+    //       public: chore.public,
+    //     })
+    //     .eq("id", chore.id);
 
-      if (error) {
-        throw new Error(error.message);
-      }
-    } catch (error: unknown) {
-      console.error("Error updating chore", error);
-      return rejectWithValue(error);
-    }
+    //   if (error) {
+    //     throw new Error(error.message);
+    //   }
+    // } catch (error: unknown) {
+    //   console.error("Error updating chore", error);
+    //   return rejectWithValue(error);
+    // }
+    console.log("update chore called", chore);
   }
 );
 
 export const deleteChore = createAsyncThunk<void, { id: string }>(
   "chore/deleteChore",
   async ({ id }, { rejectWithValue }) => {
-    try {
-      const { error } = await supabase.from("chore").delete().eq("id", id);
+    // try {
+    //   const { error } = await supabase.from("chore").delete().eq("id", id);
 
-      if (error) {
-        throw new Error(error.message);
-      }
-    } catch (error: unknown) {
-      console.error("Error delete chore", error);
-      return rejectWithValue(error);
-    }
+    //   if (error) {
+    //     throw new Error(error.message);
+    //   }
+    // } catch (error: unknown) {
+    //   console.error("Error delete chore", error);
+    //   return rejectWithValue(error);
+    // }
+    console.log("delete chore called", id);
   }
 );
 
 export const createChore = createAsyncThunk<void, { chore: Chore }>(
   "chore/createChore",
   async ({ chore }, { rejectWithValue }) => {
-    try {
-      const { error } = await supabase.from("chore").insert({
-        id: uuidv4(),
-        name: chore.name,
-        description: chore.description,
-        completed_on: chore.completed_on,
-        frequency_days: chore.frequency_days,
-        public: chore.public,
-      });
+    // try {
+    //   const { error } = await supabase.from("chore").insert({
+    //     id: uuidv4(),
+    //     name: chore.name,
+    //     description: chore.description,
+    //     completed_on: chore.completed_on,
+    //     frequency_days: chore.frequency_days,
+    //     public: chore.public,
+    //   });
 
-      if (error) {
-        throw new Error(error.message);
-      }
-    } catch (error: unknown) {
-      console.error("Error create chore", error);
-      return rejectWithValue(error);
-    }
+    //   if (error) {
+    //     throw new Error(error.message);
+    //   }
+    // } catch (error: unknown) {
+    //   console.error("Error create chore", error);
+    //   return rejectWithValue(error);
+    // }
+    console.log("create chore called", chore);
   }
 );
 
@@ -148,9 +140,6 @@ export const choreSlice = createAppSlice({
   name: "chore",
   initialState,
   reducers: (create) => ({
-    editChore: create.reducer((state, action: PayloadAction<Chore | null>) => {
-      state.data.editChore = action.payload;
-    }),
     resetStatus: create.reducer((state) => {
       state.status = { ...initialState.status };
     }),
@@ -178,7 +167,6 @@ export const choreSlice = createAppSlice({
         state.status.fetchPublicChores = AsyncStatus.REJECTED;
       })
       .addCase(updateChore.fulfilled, (state) => {
-        state.data.editChore = null;
         state.status.updateChore = AsyncStatus.SUCCESSFUL;
       })
       .addCase(updateChore.pending, (state) => {
@@ -188,7 +176,6 @@ export const choreSlice = createAppSlice({
         state.status.updateChore = AsyncStatus.REJECTED;
       })
       .addCase(createChore.fulfilled, (state) => {
-        state.data.editChore = null;
         state.status.createChore = AsyncStatus.SUCCESSFUL;
       })
       .addCase(createChore.pending, (state) => {
@@ -210,17 +197,15 @@ export const choreSlice = createAppSlice({
   selectors: {
     selectUserChores: (chores) => chores.data.userChores,
     selectPublicChores: (chores) => chores.data.publicChores,
-    selectEditChore: (chores) => chores.data.editChore,
-    selectError: (chores) => chores.error,
-    selectStatus: (chores) => chores.status,
+    selectChoreError: (chores) => chores.error,
+    selectChoreStatus: (chores) => chores.status,
   },
 });
 
-export const { editChore, resetStatus } = choreSlice.actions;
+export const { resetStatus } = choreSlice.actions;
 export const {
   selectUserChores,
   selectPublicChores,
-  selectEditChore,
-  selectError,
-  selectStatus,
+  selectChoreError,
+  selectChoreStatus,
 } = choreSlice.selectors;
