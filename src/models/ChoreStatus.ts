@@ -6,4 +6,5 @@ export interface ChoreStatus {
   createChore: AsyncStatus;
   updateChore: AsyncStatus;
   deleteChore: AsyncStatus;
+  completeChore: AsyncStatus;
 }

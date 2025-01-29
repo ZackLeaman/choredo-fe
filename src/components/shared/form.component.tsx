@@ -38,7 +38,7 @@ const FormComponent: React.FC<FormComponentProps> = ({
   }, [inputs, reset]);
 
   return (
-    <section>
+    <section className="mt-10">
       {error && (
         <span
           className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -49,20 +49,20 @@ const FormComponent: React.FC<FormComponentProps> = ({
       )}
       <form
         onSubmit={handleSubmit(onSubmitHandler)}
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-2 card"
       >
         {inputs &&
           inputs.map((input, index) => (
             <section
               key={`${input.id}-${index}`}
-              className="flex flex-nowrap gap-2 justify-between"
+              className="flex flex-nowrap gap-2 justify-between items-center min-w-md object-contain"
             >
               <label htmlFor={input.id}>{input.label}</label>
               {input.type !== "textarea" && (
                 <input
                   id={input.id}
                   type={input.type}
-                  disabled={loading}
+                  disabled={input.disabled ?? loading}
                   className="p-2"
                   {...register(`${input.id}`, {
                     required: input.required,
@@ -74,7 +74,7 @@ const FormComponent: React.FC<FormComponentProps> = ({
               {input.type === "textarea" && (
                 <textarea
                   id={input.id}
-                  disabled={loading}
+                  disabled={input.disabled ?? loading}
                   {...register(input.id, {
                     required: input.required,
                     ...input.additionalProps,
@@ -89,8 +89,8 @@ const FormComponent: React.FC<FormComponentProps> = ({
         {!loading && (
           <button
             type="submit"
-            disabled={!formState.isValid}
-            className="bg-lime-600 mt-4"
+            disabled={!formState.isValid || loading}
+            className={`${!formState.isValid || loading ? 'bg-gray-800' : 'bg-lime-600'} mt-4`}
           >
             {submitText}
           </button>

@@ -6,4 +6,5 @@ export interface FormInput {
   required?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   additionalProps?: any;
+  disabled?: boolean;
 }

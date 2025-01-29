@@ -1,6 +1,6 @@
 import { SubmitHandler } from "react-hook-form";
 import { FormInput, FormSubmit } from "../../models";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import FormComponent from "../shared/form.component";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -17,14 +17,20 @@ interface LoginSignupPageProps {
 
 const LoginSignupPage: React.FC<LoginSignupPageProps> = ({ isSignup }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const error = useSelector(selectUserError);
   const status = useSelector(selectUserStatus);
 
-  const onSubmitHandler: SubmitHandler<FormSubmit> = (data: FormSubmit) => {
+  const onSubmitHandler: SubmitHandler<FormSubmit> = async (data: FormSubmit) => {
     if (data.email && data.password) {
       if (isSignup) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        dispatch(fetchSignup({ data }) as any);
+        const resultAction = await dispatch(fetchSignup({ data }) as any);
+
+        if (fetchSignup.fulfilled.match(resultAction)) {
+          // If the action was successful, redirect to '/'
+          navigate('/');
+        }
       } else {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         dispatch(fetchLogin({ data }) as any);
@@ -57,10 +63,12 @@ const LoginSignupPage: React.FC<LoginSignupPageProps> = ({ isSignup }) => {
           } as FormInput,
         ]}
       />
-      <NavLink to={isSignup ? "/" : "/signup"}>
-        to {isSignup ? "Login" : "Signup"}
-      </NavLink>
-      {!isSignup && <NavLink to={"/forgot-password"}>Forgot Password?</NavLink>}
+      <div className="flex justify-around mt-10">
+        <NavLink to={isSignup ? "/" : "/signup"}>
+          to {isSignup ? "Login" : "Signup"}
+        </NavLink>
+        {!isSignup && <NavLink to={"/forgot-password"}>Forgot Password?</NavLink>}
+      </div>
     </div>
   );
 };

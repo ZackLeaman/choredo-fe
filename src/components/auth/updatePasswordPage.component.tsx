@@ -9,11 +9,14 @@ import {
   selectUserStatus,
 } from "../../slices";
 import { AsyncStatus } from "../../enums/asyncStatus";
+import { useNavigate, useParams } from "react-router";
 
 const UpdatePasswordPage: React.FC = () => {
+  const parms = useParams();
   const dispatch = useDispatch();
   const error = useSelector(selectUserError);
   const status = useSelector(selectUserStatus);
+  const navigate = useNavigate();
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
@@ -37,14 +40,19 @@ const UpdatePasswordPage: React.FC = () => {
     }
   }, []);
 
-  const onSubmitHandler: SubmitHandler<FormSubmit> = (data: FormSubmit) => {
+  const onSubmitHandler: SubmitHandler<FormSubmit> = async (data: FormSubmit) => {
     if (accessToken && data.password && data.confirm && refreshToken) {
-      dispatch(
+      const resultAction = await dispatch(
         fetchUpdatePassword({
           data: { ...data, accessToken, refreshToken },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }) as any
       );
+
+      if (fetchUpdatePassword.fulfilled.match(resultAction)) {
+        // If the action was successful, redirect to '/'
+        navigate('/');
+      }
     }
   };
 
@@ -57,6 +65,13 @@ const UpdatePasswordPage: React.FC = () => {
         error={error}
         loading={status === AsyncStatus.LOADING}
         inputs={[
+          {
+            id: "email",
+            type: "email",
+            label: "Email",
+            defaultValue: parms.email,
+            disabled: true,
+          } as FormInput,
           {
             id: "password",
             type: "password",

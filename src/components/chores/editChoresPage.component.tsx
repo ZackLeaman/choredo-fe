@@ -1,6 +1,5 @@
 import { SubmitHandler } from "react-hook-form";
 import { useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createChore,
@@ -14,9 +13,11 @@ import { AsyncStatus } from "../../enums/asyncStatus";
 import { useNavigate, useParams } from "react-router";
 import FormComponent from "../shared/form.component";
 import { FormInput, FormSubmit } from "../../models";
+import { selectUserSession } from "../../slices";
 
 const EditChoresPage: React.FC = () => {
   const dispatch = useDispatch();
+  const session = useSelector(selectUserSession);
   const chores = useSelector(selectUserChores);
   const status = useSelector(selectChoreStatus);
   const error = useSelector(selectChoreError);
@@ -47,6 +48,7 @@ const EditChoresPage: React.FC = () => {
             frequency_days: +data.frequencyDays,
             public: !data.isPrivate,
           },
+          accessToken: session.access_token,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }) as any
       );
@@ -54,13 +56,14 @@ const EditChoresPage: React.FC = () => {
       dispatch(
         createChore({
           chore: {
-            id: uuidv4(), // TODO maybe do this on backend instead?
+            id: 'done-on-backend',
             name: data.name.toString(),
             description: data.description.toString(),
             completed_on: data.completedOn.toString(),
             frequency_days: +data.frequencyDays,
             public: !data.isPrivate,
           },
+          accessToken: session.access_token,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }) as any
       );
@@ -69,7 +72,7 @@ const EditChoresPage: React.FC = () => {
 
   return (
     <>
-      <h1 className="mb-8 text-cyan-500">
+      <h1 className="mb-6 text-cyan-500">
         {!chore ? "Create" : "Edit"} a Chore
       </h1>
       <FormComponent

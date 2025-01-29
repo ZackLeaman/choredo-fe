@@ -2,10 +2,10 @@ import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { FormSubmit } from "../models";
 import { AsyncStatus } from "../enums/asyncStatus";
 import { createAppSlice } from "../store/createAppSlice";
-import { User } from "@supabase/supabase-js";
+import { Session, User } from "@supabase/supabase-js";
 
 export interface UserSliceState {
-  data: User;
+  data: { user: User; session: Session };
   status: AsyncStatus;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any;
@@ -13,17 +13,38 @@ export interface UserSliceState {
 
 const initialState: UserSliceState = {
   data: {
-    id: "",
-    aud: "",
-    role: "",
-    email: "",
-    app_metadata: {
-      provider: "",
-      providers: [],
+    user: {
+      id: "",
+      aud: "",
+      role: "",
+      email: "",
+      app_metadata: {
+        provider: "",
+        providers: [],
+      },
+      identities: [],
+      user_metadata: {},
+      created_at: "",
     },
-    identities: [],
-    user_metadata: {},
-    created_at: "",
+    session: {
+      access_token: "",
+      refresh_token: "",
+      expires_in: 0,
+      token_type: "",
+      user: {
+        id: "",
+        aud: "",
+        role: "",
+        email: "",
+        app_metadata: {
+          provider: "",
+          providers: [],
+        },
+        identities: [],
+        user_metadata: {},
+        created_at: "",
+      },
+    },
   },
   status: AsyncStatus.NONE,
   error: "",
@@ -50,8 +71,8 @@ export const fetchLogin = createAsyncThunk<User | null, { data: FormSubmit }>(
 
           // TODO use resParse.data.session as well
 
-          console.log("HEYO", resParse.data.user);
-          return resParse.data.user;
+          console.log("HEYO", resParse.data);
+          return resParse.data;
         }
         throw new Error("no user login response");
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -148,7 +169,7 @@ export const fetchUpdatePassword = createAsyncThunk<
           throw new Error(resParse.error);
         }
 
-        return resParse.data.user;
+        return resParse.message;
       }
       throw new Error("no update password response");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -169,7 +190,10 @@ export const userSlice = createAppSlice({
     builder
       .addCase(
         fetchLogin.fulfilled,
-        (state: UserSliceState, action: PayloadAction<User>) => {
+        (
+          state: UserSliceState,
+          action: PayloadAction<{ user: User; session: Session }>
+        ) => {
           state.data = action.payload;
           state.error = "";
           state.status = AsyncStatus.SUCCESSFUL;
@@ -190,7 +214,8 @@ export const userSlice = createAppSlice({
         fetchSignup.fulfilled,
         (state: UserSliceState, action: PayloadAction<User>) => {
           console.log(action.payload);
-          state.data = action.payload;
+          // TODO fix signup
+          // state.data = action.payload;
           state.error = "";
           state.status = AsyncStatus.SUCCESSFUL;
         }
@@ -242,11 +267,16 @@ export const userSlice = createAppSlice({
       );
   },
   selectors: {
-    selectUser: (user: UserSliceState) => user.data,
+    selectUser: (user: UserSliceState) => user.data.user,
+    selectUserSession: (user: UserSliceState) => user.data.session,
     selectUserStatus: (user: UserSliceState) => user.status,
     selectUserError: (user: UserSliceState) => user.error,
   },
 });
 
-export const { selectUser, selectUserStatus, selectUserError } =
-  userSlice.selectors;
+export const {
+  selectUser,
+  selectUserSession,
+  selectUserStatus,
+  selectUserError,
+} = userSlice.selectors;
