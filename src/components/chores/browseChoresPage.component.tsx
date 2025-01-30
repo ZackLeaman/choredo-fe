@@ -16,7 +16,7 @@ const BrowseChoresPage: React.FC = () => {
 
   return (
     <>
-      <h1 className="mb-6 text-cyan-500">Browse Chores</h1>
+      <h1 className="mb-6">Browse Chores</h1>
       <section className="flex justify-center">
         {user &&
           chores &&

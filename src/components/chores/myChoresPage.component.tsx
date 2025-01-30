@@ -75,29 +75,9 @@ const MyChoresPage: React.FC = () => {
     setIsOptionsOpen(!isOptionsOpen);
   };
 
-  const [src, setSrc] = useState('');
-  const onClickReward = () => {
-    fetch(
-      `http://localhost:3000/achievement/reward`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session.access_token}`,
-        },
-        method: "GET",
-      }
-    ).then(res => {
-      return res.json();
-    }).then(resSrc => {
-      setSrc(resSrc);
-    })
-  }
-
   return (
     <>
-      <button onClick={onClickReward}>Get reward</button>
-      <img src={src}/>
-      <h1 className="mb-6 text-cyan-500">My Chores</h1>
+      <h1 className="mb-6">My Chores</h1>
       <section className="flex justify-center">
         {user &&
           chores &&
@@ -112,13 +92,13 @@ const MyChoresPage: React.FC = () => {
               <button
                 ref={setPopoverRef}
                 data-popover-target="popover-chore-options"
-                className="options bg-cyan-600"
+                className="options"
                 onClick={optionsHandler}
               >
                 ...
               </button>
               {isOptionsOpen && <ul
-                className="options-popover bg-cyan-600"
+                className="options-popover"
                 ref={setPopoverContentRef}
                 style={styles.popper}
                 {...attributes.popper}

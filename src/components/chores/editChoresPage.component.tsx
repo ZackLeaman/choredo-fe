@@ -75,59 +75,61 @@ const EditChoresPage: React.FC = () => {
 
   return (
     <>
-      <h1 className="mb-6 text-cyan-500">
+      <h1 className="mb-6">
         {!chore ? "Create" : "Edit"} a Chore
       </h1>
-      <FormComponent
-        submitText={!chore ? "Create" : "Update"}
-        onSubmitHandler={onSubmitHandler}
-        error={error}
-        loading={
-          chore
-            ? status.updateChore === AsyncStatus.LOADING
-            : status.createChore === AsyncStatus.LOADING
-        }
-        inputs={[
-          {
-            id: "name",
-            type: "text",
-            label: "Name*",
-            defaultValue: chore ? chore.name : "",
-            required: true,
-          } as FormInput,
-          {
-            id: "frequencyDays",
-            type: "number",
-            label: "Frequency (days)*",
-            defaultValue: chore ? chore.frequency_days : "",
-            required: true,
-            additionalProps: {
-              min: 1,
-              maxLength: 10,
-            },
-          } as FormInput,
-          {
-            id: "completedOn",
-            type: "date",
-            label: "Last Completed",
-            defaultValue: chore
-              ? chore.completed_on
-              : todayDate.toISOString().split("T")[0],
-          } as FormInput,
-          {
-            id: "isPrivate",
-            type: "checkbox",
-            label: "Private",
-            defaultValue: chore ? !chore.public : 1,
-          } as FormInput,
-          {
-            id: "description",
-            type: "textarea",
-            label: "Description",
-            defaultValue: chore ? chore.description : "",
-          } as FormInput,
-        ]}
-      />
+      <section className="flex justify-center">
+        <FormComponent
+          submitText={!chore ? "Create" : "Update"}
+          onSubmitHandler={onSubmitHandler}
+          error={error}
+          loading={
+            chore
+              ? status.updateChore === AsyncStatus.LOADING
+              : status.createChore === AsyncStatus.LOADING
+          }
+          inputs={[
+            {
+              id: "name",
+              type: "text",
+              label: "Name*",
+              defaultValue: chore ? chore.name : "",
+              required: true,
+            } as FormInput,
+            {
+              id: "frequencyDays",
+              type: "number",
+              label: "Frequency (days)*",
+              defaultValue: chore ? chore.frequency_days : "",
+              required: true,
+              additionalProps: {
+                min: 1,
+                maxLength: 10,
+              },
+            } as FormInput,
+            {
+              id: "completedOn",
+              type: "date",
+              label: "Last Completed",
+              defaultValue: chore
+                ? chore.completed_on
+                : todayDate.toISOString().split("T")[0],
+            } as FormInput,
+            {
+              id: "isPrivate",
+              type: "checkbox",
+              label: "Private",
+              defaultValue: chore ? !chore.public : 1,
+            } as FormInput,
+            {
+              id: "description",
+              type: "textarea",
+              label: "Description",
+              defaultValue: chore ? chore.description : "",
+            } as FormInput,
+          ]}
+        />
+      </section>
     </>
   );
 };

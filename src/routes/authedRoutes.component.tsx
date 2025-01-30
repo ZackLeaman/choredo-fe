@@ -6,6 +6,7 @@ import EditChoresPage from "../components/chores/editChoresPage.component";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSignoutUser, selectUserSession, selectUserStatus } from "../slices";
 import { AsyncStatus } from "../enums/asyncStatus";
+import AchievementsPage from "../components/achievements/achievements.component";
 
 const AuthedRoutes: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ const AuthedRoutes: React.FC = () => {
         <Route path="/chores" element={<BrowseChoresPage />} />
         <Route path="/create-chore" element={<EditChoresPage />} />
         <Route path="/edit-chore/:id" element={<EditChoresPage />} />
+        <Route path="/achievements" element={<AchievementsPage />} />
         <Route path="*" element={<div>404 Not Found.</div>} />
       </Routes>
     </>

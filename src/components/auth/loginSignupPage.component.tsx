@@ -41,28 +41,30 @@ const LoginSignupPage: React.FC<LoginSignupPageProps> = ({ isSignup }) => {
   return (
     <div>
       <h1>Choredos - {isSignup ? "Signup" : "Login"}</h1>
-      <FormComponent
-        submitText={isSignup ? "Signup" : "Login"}
-        onSubmitHandler={onSubmitHandler}
-        error={error}
-        loading={status === AsyncStatus.LOADING}
-        inputs={[
-          {
-            id: "email",
-            type: "email",
-            label: "Email",
-            defaultValue: "",
-            required: true,
-          } as FormInput,
-          {
-            id: "password",
-            type: "password",
-            label: "Password",
-            defaultValue: "",
-            required: true,
-          } as FormInput,
-        ]}
-      />
+      <section className="flex justify-center">
+        <FormComponent
+          submitText={isSignup ? "Signup" : "Login"}
+          onSubmitHandler={onSubmitHandler}
+          error={error}
+          loading={status === AsyncStatus.LOADING}
+          inputs={[
+            {
+              id: "email",
+              type: "email",
+              label: "Email",
+              defaultValue: "",
+              required: true,
+            } as FormInput,
+            {
+              id: "password",
+              type: "password",
+              label: "Password",
+              defaultValue: "",
+              required: true,
+            } as FormInput,
+          ]}
+        />
+      </section>
       <div className="flex justify-around mt-10">
         <NavLink to={isSignup ? "/" : "/signup"}>
           to {isSignup ? "Login" : "Signup"}

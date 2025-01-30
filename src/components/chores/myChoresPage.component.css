@@ -45,4 +45,8 @@
     top: -1rem;
     right: -1rem;
   }
+
+  .options, .options-popover {
+    background: green;
+  }
 }
