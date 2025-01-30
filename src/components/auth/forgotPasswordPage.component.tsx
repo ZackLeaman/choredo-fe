@@ -25,21 +25,23 @@ const ForgotPasswordPage: React.FC = () => {
   return (
     <div>
       <h1>Choredos - Forgot Password</h1>
-      <FormComponent
-        submitText="Submit"
-        onSubmitHandler={onSubmitHandler}
-        error={error}
-        loading={status === AsyncStatus.LOADING}
-        inputs={[
-          {
-            id: "email",
-            type: "email",
-            label: "Email",
-            defaultValue: "",
-            required: true,
-          } as FormInput,
-        ]}
-      />
+      <section className="flex justify-center">
+        <FormComponent
+          submitText="Submit"
+          onSubmitHandler={onSubmitHandler}
+          error={error}
+          loading={status === AsyncStatus.LOADING}
+          inputs={[
+            {
+              id: "email",
+              type: "email",
+              label: "Email",
+              defaultValue: "",
+              required: true,
+            } as FormInput,
+          ]}
+        />
+      </section>
       <NavLink to="/">to Login</NavLink>
     </div>
   );

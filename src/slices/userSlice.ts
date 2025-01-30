@@ -158,6 +158,7 @@ export const fetchUpdatePassword = createAsyncThunk<
       const res = await fetch(`http://localhost:3000/auth/update-password`, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${data.accessToken}`,
         },
         method: "POST",
         body: JSON.stringify(data),
@@ -180,6 +181,38 @@ export const fetchUpdatePassword = createAsyncThunk<
   }
   return rejectWithValue("Error update password: invalid params");
 });
+
+export const fetchSignoutUser = createAsyncThunk<string, string>(
+  "user/fetchSignoutUser",
+  async (accessToken, { rejectWithValue }) => {
+    if (accessToken) {
+      try {
+        const res = await fetch(`http://localhost:3000/auth/signout`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          method: "POST",
+        });
+        if (res) {
+          const resParse = await res.json();
+
+          if (resParse.error) {
+            throw new Error(resParse.error);
+          }
+
+          return resParse.message;
+        }
+        throw new Error("no signout user response");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        console.error("Error signout user", error);
+        return rejectWithValue(error);
+      }
+    }
+    return rejectWithValue("Error update password: invalid params");
+  }
+);
 
 export const userSlice = createAppSlice({
   name: "user",
@@ -259,6 +292,23 @@ export const userSlice = createAppSlice({
       })
       .addCase(
         fetchUpdatePassword.rejected,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (state: UserSliceState, action: PayloadAction<any>) => {
+          state.status = AsyncStatus.REJECTED;
+          state.error = action.payload;
+        }
+      )
+      .addCase(fetchSignoutUser.fulfilled, (state: UserSliceState) => {
+        state.data = { ...initialState.data };
+        state.error = "";
+        state.status = AsyncStatus.SUCCESSFUL;
+      })
+      .addCase(fetchSignoutUser.pending, (state: UserSliceState) => {
+        state.status = AsyncStatus.LOADING;
+        state.data = { ...initialState.data };
+      })
+      .addCase(
+        fetchSignoutUser.rejected,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (state: UserSliceState, action: PayloadAction<any>) => {
           state.status = AsyncStatus.REJECTED;

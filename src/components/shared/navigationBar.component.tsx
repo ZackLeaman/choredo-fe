@@ -4,9 +4,10 @@ import { selectUser } from "../../slices";
 
 export interface NavigationBarProps {
   logout: () => void;
+  loading: boolean;
 }
 
-const NavigationBar: React.FC<NavigationBarProps> = ({ logout }) => {
+const NavigationBar: React.FC<NavigationBarProps> = ({ logout, loading }) => {
   const user = useSelector(selectUser);
 
   return (
@@ -38,7 +39,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ logout }) => {
           Create a Chore
         </NavLink>
         <div className="flex-1 text-right">
-          <button className="btn" onClick={logout}>
+          <button className="btn" onClick={logout} disabled={loading}>
             Logout
           </button>
         </div>

@@ -1,0 +1,48 @@
+.chore {
+  position: relative;
+
+  .options-popover {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+
+  .complete,
+  .options {
+    position: absolute;
+  }
+
+  .complete {
+    top: -0.1rem;
+    right: calc(100% - 1rem);
+    bottom: 0.9rem;
+    border-radius: 1rem 0 0 1rem;
+    box-shadow: 0 1rem 0 #84c948;
+
+    &:hover {
+      background: #aaf323;
+      color: #273a16;
+      border: none;
+    }
+
+    &:active {
+      box-shadow: 0 0.3rem 0 #84c948;
+      border: none;
+      outline: none;
+      bottom: 0.15rem;
+    }
+
+    &:focus {
+      border: none;
+      outline: none;
+    }
+
+    &:focus-visible {
+      border: 0.2rem solid #fff;
+    }
+  }
+
+  .options {
+    top: -1rem;
+    right: -1rem;
+  }
+}

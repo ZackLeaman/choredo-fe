@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   completeChore,
   deleteChore,
@@ -12,6 +12,8 @@ import { AsyncStatus } from "../../enums/asyncStatus";
 import { Chore } from "../../models";
 import { useNavigate } from "react-router";
 import { selectUser, selectUserSession } from "../../slices";
+import { usePopper } from "react-popper";
+import "./myChoresPage.component.css";
 
 const MyChoresPage: React.FC = () => {
   const user = useSelector(selectUser);
@@ -20,6 +22,23 @@ const MyChoresPage: React.FC = () => {
   const chores = useSelector(selectUserChores);
   const status = useSelector(selectChoreStatus);
   const navigate = useNavigate();
+  const [popoverRef, setPopoverRef] = useState<HTMLElement | null>(null);
+  const [popoverContentRef, setPopoverContentRef] =
+    useState<HTMLElement | null>(null);
+  const [popoverEditRef, setPopoverEditRef] = useState<HTMLElement | null>(
+    null
+  );
+  const [popoverDeleteRef, setPopoverDeleteRef] = useState<HTMLElement | null>(
+    null
+  );
+  const { styles, attributes } = usePopper(popoverRef, popoverContentRef, {
+    placement: "bottom-start",
+    modifiers: [
+      { name: "edit", options: { element: popoverEditRef } },
+      { name: "delete", options: { element: popoverDeleteRef } },
+    ],
+  });
+  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -39,28 +58,92 @@ const MyChoresPage: React.FC = () => {
   };
 
   const deleteHandler = (choreId: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dispatch(deleteChore({ choreId, accessToken: session.access_token  }) as any);
+    dispatch(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      deleteChore({ choreId, accessToken: session.access_token }) as any
+    );
   };
 
   const completeHandler = (choreId: string) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dispatch(completeChore({ choreId, accessToken: session.access_token }) as any);
+    dispatch(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      completeChore({ choreId, accessToken: session.access_token }) as any
+    );
+  };
+
+  const optionsHandler = () => {
+    setIsOptionsOpen(!isOptionsOpen);
+  };
+
+  const [src, setSrc] = useState('');
+  const onClickReward = () => {
+    fetch(
+      `http://localhost:3000/achievement/reward`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        method: "GET",
+      }
+    ).then(res => {
+      return res.json();
+    }).then(resSrc => {
+      setSrc(resSrc);
+    })
   }
 
   return (
     <>
+      <button onClick={onClickReward}>Get reward</button>
+      <img src={src}/>
       <h1 className="mb-6 text-cyan-500">My Chores</h1>
       <section className="flex justify-center">
         {user &&
           chores &&
           chores.map((c, index) => (
-            <div className="card" key={index}>
-              <div className="flex justify-center gap-5 mb-2">
-                <button onClick={() => completeHandler(c.id)}>Complete</button>
-                <button onClick={() => editHandler(c)}>Edit</button>
-                <button onClick={() => deleteHandler(c.id)}>X</button>
-              </div>
+            <div className="card chore" key={index}>
+              <button
+                className="complete bg-lime-600"
+                onClick={() => completeHandler(c.id)}
+              >
+                Complete
+              </button>
+              <button
+                ref={setPopoverRef}
+                data-popover-target="popover-chore-options"
+                className="options bg-cyan-600"
+                onClick={optionsHandler}
+              >
+                ...
+              </button>
+              {isOptionsOpen && <ul
+                className="options-popover bg-cyan-600"
+                ref={setPopoverContentRef}
+                style={styles.popper}
+                {...attributes.popper}
+              >
+                <li>
+                  <button
+                    className="edit bg-cyan-900 mb-2 w-full"
+                    onClick={() => editHandler(c)}
+                    ref={setPopoverEditRef}
+                    style={styles.arrow}
+                  >
+                    Edit
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="delete bg-red-600 w-full"
+                    onClick={() => deleteHandler(c.id)}
+                    ref={setPopoverDeleteRef}
+                    style={styles.arrow}
+                  >
+                    Delete
+                  </button>
+                </li>
+              </ul>}
               <h2>Name: {c.name}</h2>
               <p>Frequency: {c.frequency_days} days</p>
               <p>Last Completed: {c.completed_on}</p>

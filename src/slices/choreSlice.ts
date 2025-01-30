@@ -192,6 +192,9 @@ export const completeChore = createAsyncThunk<
   "chore/completeChore",
   async ({ choreId, accessToken }, { rejectWithValue }) => {
     try {
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
+
       const res = await fetch(
         `http://localhost:3000/chores/complete/${choreId}`,
         {
@@ -201,7 +204,7 @@ export const completeChore = createAsyncThunk<
           },
           method: "POST",
           body: JSON.stringify({
-            completed_on: new Date().toISOString().split("T")[0],
+            completed_on: todayDate.toISOString().split("T")[0],
           }),
         }
       );

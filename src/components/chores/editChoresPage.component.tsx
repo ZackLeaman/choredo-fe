@@ -70,6 +70,9 @@ const EditChoresPage: React.FC = () => {
     }
   };
 
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
+
   return (
     <>
       <h1 className="mb-6 text-cyan-500">
@@ -109,7 +112,7 @@ const EditChoresPage: React.FC = () => {
             label: "Last Completed",
             defaultValue: chore
               ? chore.completed_on
-              : new Date().toISOString().split("T")[0],
+              : todayDate.toISOString().split("T")[0],
           } as FormInput,
           {
             id: "isPrivate",

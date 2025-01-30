@@ -40,7 +40,9 @@ const UpdatePasswordPage: React.FC = () => {
     }
   }, []);
 
-  const onSubmitHandler: SubmitHandler<FormSubmit> = async (data: FormSubmit) => {
+  const onSubmitHandler: SubmitHandler<FormSubmit> = async (
+    data: FormSubmit
+  ) => {
     if (accessToken && data.password && data.confirm && refreshToken) {
       const resultAction = await dispatch(
         fetchUpdatePassword({
@@ -51,7 +53,7 @@ const UpdatePasswordPage: React.FC = () => {
 
       if (fetchUpdatePassword.fulfilled.match(resultAction)) {
         // If the action was successful, redirect to '/'
-        navigate('/');
+        navigate("/");
       }
     }
   };
@@ -59,35 +61,37 @@ const UpdatePasswordPage: React.FC = () => {
   return (
     <div>
       <h1>Choredos - Update Password</h1>
-      <FormComponent
-        submitText="Update"
-        onSubmitHandler={onSubmitHandler}
-        error={error}
-        loading={status === AsyncStatus.LOADING}
-        inputs={[
-          {
-            id: "email",
-            type: "email",
-            label: "Email",
-            defaultValue: parms.email,
-            disabled: true,
-          } as FormInput,
-          {
-            id: "password",
-            type: "password",
-            label: "Password",
-            defaultValue: "",
-            required: true,
-          } as FormInput,
-          {
-            id: "confirm",
-            type: "password",
-            label: "Confirm Password",
-            defaultValue: "",
-            required: true,
-          } as FormInput,
-        ]}
-      />
+      <section className="flex justify-center">
+        <FormComponent
+          submitText="Update"
+          onSubmitHandler={onSubmitHandler}
+          error={error}
+          loading={status === AsyncStatus.LOADING}
+          inputs={[
+            {
+              id: "email",
+              type: "email",
+              label: "Email",
+              defaultValue: parms.email,
+              disabled: true,
+            } as FormInput,
+            {
+              id: "password",
+              type: "password",
+              label: "Password",
+              defaultValue: "",
+              required: true,
+            } as FormInput,
+            {
+              id: "confirm",
+              type: "password",
+              label: "Confirm Password",
+              defaultValue: "",
+              required: true,
+            } as FormInput,
+          ]}
+        />
+      </section>
     </div>
   );
 };
