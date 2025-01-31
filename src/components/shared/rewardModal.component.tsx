@@ -60,10 +60,9 @@ const RewardModalComponent: React.FC = () => {
   const onClose = () => {
     if (level_up_increase <= 0) {
       setDismissReward(true);
-    } else {
-      setRewardSrc("");
-      setLoading(false);
     }
+    setRewardSrc("");
+    setLoading(false);
   };
 
   if ((!level_up_increase || level_up_increase <= 0) && dismissReward) {

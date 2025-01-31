@@ -1,19 +1,9 @@
 .chore {
   position: relative;
-  margin-left: 8rem;
-
-  .options-popover {
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    z-index: 1;
-  }
-
-  .complete,
-  .options {
-    position: absolute;
-  }
-
+  margin-left: 6rem;
+  
   .complete {
+    position: absolute;
     top: -0.1rem;
     right: calc(100% - 1rem);
     bottom: 0.9rem;
@@ -41,14 +31,5 @@
     &:focus-visible {
       border: 0.2rem solid #fff;
     }
-  }
-
-  .options {
-    top: -1rem;
-    right: -1rem;
-  }
-
-  .options, .options-popover {
-    background: green;
   }
 }

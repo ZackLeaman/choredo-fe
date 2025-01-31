@@ -6,6 +6,7 @@ import {
   resetStatus,
   selectChoreError,
   selectChoreStatus,
+  selectPublicChores,
   selectUserChores,
   updateChore,
 } from "../../slices/choreSlice";
@@ -19,11 +20,30 @@ const EditChoresPage: React.FC = () => {
   const dispatch = useDispatch();
   const session = useSelector(selectUserSession);
   const chores = useSelector(selectUserChores);
+  const publicChores = useSelector(selectPublicChores);
   const status = useSelector(selectChoreStatus);
   const error = useSelector(selectChoreError);
   const navigate = useNavigate();
   const { id } = useParams();
-  const chore = chores.find((c) => c.id === id);
+  let copyingChore = false;
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
+
+  // set editable chore either from user or public chores
+  let chore = chores.find((c) => c.id === id);
+  if (!chore) {
+    chore = publicChores.find((c) => c.id === id);
+    if (chore) {
+      copyingChore = true;
+      // will want to clear certain data to copy a new chore
+      chore = {
+        ...chore,
+        id: 'blah', // be handles id creation
+        completed_on: todayDate.toISOString().split("T")[0],
+        public: false
+      }
+    }
+  }
 
   useEffect(() => {
     if (
@@ -37,7 +57,7 @@ const EditChoresPage: React.FC = () => {
 
   const onSubmitHandler: SubmitHandler<FormSubmit> = (data: FormSubmit) => {
     dispatch(resetStatus());
-    if (chore) {
+    if (chore && !copyingChore) {
       dispatch(
         updateChore({
           chore: {
@@ -70,17 +90,14 @@ const EditChoresPage: React.FC = () => {
     }
   };
 
-  const todayDate = new Date();
-  todayDate.setHours(0, 0, 0, 0);
-
   return (
     <>
-      <h1 className="mb-6">
+      <h1 className="mb-6 mt-14">
         {!chore ? "Create" : "Edit"} a Chore
       </h1>
       <section className="flex justify-center">
         <FormComponent
-          submitText={!chore ? "Create" : "Update"}
+          submitText={!chore || copyingChore ? "Create" : "Update"}
           onSubmitHandler={onSubmitHandler}
           error={error}
           loading={

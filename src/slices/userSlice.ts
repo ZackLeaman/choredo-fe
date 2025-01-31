@@ -217,7 +217,11 @@ export const fetchSignoutUser = createAsyncThunk<string, string>(
 export const userSlice = createAppSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: (create) => ({
+    resetError: create.reducer((state) => {
+      state.error = "";
+    }),
+  }),
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraReducers: (builder: any) => {
     builder
@@ -324,6 +328,7 @@ export const userSlice = createAppSlice({
   },
 });
 
+export const { resetError } = userSlice.actions;
 export const {
   selectUser,
   selectUserSession,

@@ -20,8 +20,8 @@ const AchievementsPage: React.FC = () => {
 
   return (
     <>
-      <h1 className="mb-20">Achievements</h1>
-      <section className="flex justify-center gap-3 px-20">
+      <h1 className="mb-20 mt-14">Achievements</h1>
+      <section className="flex flex-wrap justify-center gap-3 px-20 overflow-hidden pb-20">
         {achievements &&
           achievements.map((a, i) => (
             <div key={`${a}-${i}`} style={{ position: "relative" }}>

@@ -71,20 +71,31 @@ export const fetchPostUserProfile = createAsyncThunk<
     { rejectWithValue }
   ) => {
     try {
+      const updateProps: {
+        level?: number;
+        progress?: number;
+        chores_completed?: number;
+        level_up_increase?: number;
+      } = {};
+      if (level !== undefined) {
+        updateProps.level = level;
+      }
+      if (progress !== undefined) {
+        updateProps.progress = progress;
+      }
+      if (chores_completed !== undefined) {
+        updateProps.chores_completed = chores_completed;
+      }
+      if (level_up_increase !== undefined) {
+        updateProps.level_up_increase = level_up_increase;
+      }
       const res = await fetch("http://localhost:3000/user-profile", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
         method: "POST",
-        body: JSON.stringify({
-          level: level !== undefined ? level : 0,
-          progress: progress !== undefined ? progress : 0,
-          chores_completed:
-            chores_completed !== undefined ? chores_completed : 0,
-          level_up_increase:
-            level_up_increase !== undefined ? level_up_increase : 0,
-        }),
+        body: JSON.stringify(updateProps),
       });
 
       if (!res) {

@@ -5,6 +5,7 @@ import FormComponent from "../shared/form.component";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUpdatePassword,
+  resetError,
   selectUserError,
   selectUserStatus,
 } from "../../slices";
@@ -21,6 +22,9 @@ const UpdatePasswordPage: React.FC = () => {
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dispatch(resetError() as any)
+
     const hash = window.location.hash;
 
     if (hash) {
@@ -38,7 +42,7 @@ const UpdatePasswordPage: React.FC = () => {
         setRefreshToken(rToken);
       }
     }
-  }, []);
+  }, [dispatch]);
 
   const onSubmitHandler: SubmitHandler<FormSubmit> = async (
     data: FormSubmit
@@ -59,8 +63,11 @@ const UpdatePasswordPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Choredos - Update Password</h1>
+    <div className="mt-20">
+      <div className="flex flex-col gap-2 items-center justify-center">
+        <img className="icon" src="/creature-icon.jpg" />
+        <h1 className="text-left">Choredos - Update Password</h1>
+      </div>
       <section className="flex justify-center">
         <FormComponent
           submitText="Update"
