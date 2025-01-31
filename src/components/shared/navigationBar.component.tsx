@@ -1,9 +1,11 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router";
-import { selectUser } from "../../slices";
+import { fetchGetUserProfile, selectUser, selectUserProfileLevel, selectUserProfileProgress, selectUserSession } from "../../slices";
 // import Icon from '../../../public/fox-icon.jpg';
 import Icon from "../../../public/creature-icon.jpg";
 import "./navigationBar.component.css";
+import { useEffect } from "react";
+import { USER_PROGRESS_MAX } from "../../utils/userLevel";
 
 export interface NavigationBarProps {
   logout: () => void;
@@ -12,8 +14,18 @@ export interface NavigationBarProps {
 
 const NavigationBar: React.FC<NavigationBarProps> = ({ logout, loading }) => {
   const user = useSelector(selectUser);
-  const level = 30000;
-  const percentage = 80;
+  const session = useSelector(selectUserSession);
+  const upLevel = useSelector(selectUserProfileLevel);
+  const upProgress = useSelector(selectUserProfileProgress);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dispatch(fetchGetUserProfile({ accessToken: session.access_token }) as any);
+  }, [dispatch, session]);
+
+  const level = upLevel;
+  const percentage = Math.floor(upProgress / USER_PROGRESS_MAX * 100);
 
   const navLinks = [
     {
@@ -61,6 +73,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ logout, loading }) => {
         {navLinks &&
           navLinks.map((n) => (
             <NavLink
+              key={n.to}
               to={n.to}
               end
               className={({ isActive }) => (isActive ? "text-lime-500" : "")}

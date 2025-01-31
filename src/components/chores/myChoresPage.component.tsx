@@ -11,9 +11,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { AsyncStatus } from "../../enums/asyncStatus";
 import { Chore } from "../../models";
 import { useNavigate } from "react-router";
-import { selectUser, selectUserSession } from "../../slices";
+import {
+  fetchPostUserProfile,
+  selectUser,
+  selectUserProfile,
+  selectUserSession,
+} from "../../slices";
 import { usePopper } from "react-popper";
 import "./myChoresPage.component.css";
+import { updateUserProgress } from "../../utils/userLevel";
 
 const MyChoresPage: React.FC = () => {
   const user = useSelector(selectUser);
@@ -21,6 +27,7 @@ const MyChoresPage: React.FC = () => {
   const dispatch = useDispatch();
   const chores = useSelector(selectUserChores);
   const status = useSelector(selectChoreStatus);
+  const userProfile = useSelector(selectUserProfile);
   const navigate = useNavigate();
   const [popoverRef, setPopoverRef] = useState<HTMLElement | null>(null);
   const [popoverContentRef, setPopoverContentRef] =
@@ -64,10 +71,30 @@ const MyChoresPage: React.FC = () => {
     );
   };
 
-  const completeHandler = (choreId: string) => {
+  const completeHandler = (chore: Chore) => {
     dispatch(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      completeChore({ choreId, accessToken: session.access_token }) as any
+      completeChore({
+        choreId: chore.id,
+        accessToken: session.access_token,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      }) as any
+    );
+    
+    const { level, progress } = updateUserProgress(
+      userProfile.level,
+      userProfile.progress,
+      chore.frequency_days
+    );
+    
+    dispatch(
+      fetchPostUserProfile({
+        accessToken: session.access_token,
+        chores_completed: userProfile.chores_completed + 1,
+        level,
+        progress,
+        level_up_increase: level - userProfile.level,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      }) as any
     );
   };
 
@@ -85,7 +112,7 @@ const MyChoresPage: React.FC = () => {
             <div className="card chore" key={index}>
               <button
                 className="complete bg-lime-600"
-                onClick={() => completeHandler(c.id)}
+                onClick={() => completeHandler(c)}
               >
                 Complete
               </button>
@@ -97,33 +124,35 @@ const MyChoresPage: React.FC = () => {
               >
                 ...
               </button>
-              {isOptionsOpen && <ul
-                className="options-popover"
-                ref={setPopoverContentRef}
-                style={styles.popper}
-                {...attributes.popper}
-              >
-                <li>
-                  <button
-                    className="edit bg-cyan-900 mb-2 w-full"
-                    onClick={() => editHandler(c)}
-                    ref={setPopoverEditRef}
-                    style={styles.arrow}
-                  >
-                    Edit
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className="delete bg-red-600 w-full"
-                    onClick={() => deleteHandler(c.id)}
-                    ref={setPopoverDeleteRef}
-                    style={styles.arrow}
-                  >
-                    Delete
-                  </button>
-                </li>
-              </ul>}
+              {isOptionsOpen && (
+                <ul
+                  className="options-popover"
+                  ref={setPopoverContentRef}
+                  style={styles.popper}
+                  {...attributes.popper}
+                >
+                  <li>
+                    <button
+                      className="edit bg-cyan-900 mb-2 w-full"
+                      onClick={() => editHandler(c)}
+                      ref={setPopoverEditRef}
+                      style={styles.arrow}
+                    >
+                      Edit
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className="delete bg-red-600 w-full"
+                      onClick={() => deleteHandler(c.id)}
+                      ref={setPopoverDeleteRef}
+                      style={styles.arrow}
+                    >
+                      Delete
+                    </button>
+                  </li>
+                </ul>
+              )}
               <h2>Name: {c.name}</h2>
               <p>Frequency: {c.frequency_days} days</p>
               <p>Last Completed: {c.completed_on}</p>

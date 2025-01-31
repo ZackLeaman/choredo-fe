@@ -4,3 +4,4 @@ export * from "./FormInput";
 export * from "./FormSubmit";
 export * from "./ChoreStateData";
 export * from "./ChoreStatus";
+export * from "./UserProfileData";

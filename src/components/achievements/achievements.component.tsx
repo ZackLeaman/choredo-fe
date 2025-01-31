@@ -1,33 +1,34 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { selectUserSession } from "../../slices";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchUserAchievements,
+  selectUserProfile,
+  selectUserSession,
+} from "../../slices";
 
 const AchievementsPage: React.FC = () => {
   const session = useSelector(selectUserSession);
-  const [src, setSrc] = useState("");
+  const { achievements } = useSelector(selectUserProfile);
+  const dispatch = useDispatch();
 
-  const onClickReward = () => {
-    fetch(`http://localhost:3000/achievement/reward`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.access_token}`,
-      },
-      method: "GET",
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((resSrc) => {
-        setSrc(resSrc);
-      });
-  };
+  useEffect(() => {
+    dispatch(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      fetchUserAchievements({ accessToken: session.access_token }) as any
+    );
+  }, [session, dispatch]);
 
   return (
     <>
-      <h1 className="mb-6">Achievements</h1>
-      <section className="flex justify-center">
-        <button onClick={onClickReward}>Get reward</button>
-        <img src={src} />
+      <h1 className="mb-20">Achievements</h1>
+      <section className="flex justify-center gap-3 px-20">
+        {achievements &&
+          achievements.map((a, i) => (
+            <div key={`${a}-${i}`} style={{ position: "relative" }}>
+              <img className="achievement-reflection" src={a.location} />
+              <img className="achievement" src={a.location} />
+            </div>
+          ))}
       </section>
     </>
   );

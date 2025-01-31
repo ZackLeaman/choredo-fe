@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchSignoutUser, selectUserSession, selectUserStatus } from "../slices";
 import { AsyncStatus } from "../enums/asyncStatus";
 import AchievementsPage from "../components/achievements/achievements.component";
+import RewardModalComponent from "../components/shared/rewardModal.component";
 
 const AuthedRoutes: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const AuthedRoutes: React.FC = () => {
         <Route path="/achievements" element={<AchievementsPage />} />
         <Route path="*" element={<div>404 Not Found.</div>} />
       </Routes>
+      <RewardModalComponent />
     </>
   );
 };

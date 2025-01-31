@@ -43,6 +43,65 @@
   border: 0.15rem solid #658812;
 }
 
-.read-the-docs {
-  color: #888;
+@keyframes bob {
+  from {
+    top: 0;
+  }
+
+  to {
+    top: -0.5rem;
+  }
+}
+
+@keyframes bob-reflection {
+  from {
+    top: 10rem;
+    opacity: 0.3;
+  }
+
+  to {
+    top: 10.5rem;
+    opacity: 0.1;
+  }
+}
+
+.achievement,
+.achievement-reflection {
+  width: 15rem;
+  height: 15rem;
+}
+
+.achievement {
+  z-index: 1;
+  position: relative;
+  filter: drop-shadow(3px 4px 10px #000);
+  animation: bob 1.5s ease-in-out infinite alternate-reverse;
+}
+
+.achievement-reflection {
+  z-index: 0;
+  position: absolute;
+  transform: scale(1, -0.6);
+  top: 10rem;
+  filter: blur(0.1rem);
+  opacity: 0.3;
+  mask-image: linear-gradient(transparent 30%, white 90%);
+  animation: bob-reflection 1.5s ease-in-out infinite alternate-reverse;
+}
+
+div:nth-child(4n) > .achievement,
+div:nth-child(4n) > .achievement-reflection {
+  animation-delay: 0s;
+}
+div:nth-child(4n-1) > .achievement,
+div:nth-child(4n-1) > .achievement-reflection {
+  animation-delay: -0.5s;
+}
+div:nth-child(4n-2) > .achievement,
+div:nth-child(4n-2) > .achievement-reflection {
+  animation-delay: -1s;
+}
+div:nth-child(4n-3) > .achievement,
+div:nth-child(4n-3) > .achievement-reflection {
+  animation-delay: -1.5s;
 }

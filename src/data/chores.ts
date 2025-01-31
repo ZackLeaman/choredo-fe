@@ -31,6 +31,7 @@ const MockChores: Chore[] = [
     description: "Chore 4 description here...",
     completed_on: "2024-11-22",
     frequency_days: 300,
+    public: false,
   },
 ];
 
