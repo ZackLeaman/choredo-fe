@@ -24,7 +24,7 @@ const RewardModalComponent: React.FC = () => {
 
   const onClickReward = () => {
     setLoading(true);
-    fetch(`http://localhost:3000/achievement/reward`, {
+    fetch(`${import.meta.env.VITE_BACKEND}/achievement/reward`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${session.access_token}`,

@@ -55,7 +55,7 @@ export const fetchLogin = createAsyncThunk<User | null, { data: FormSubmit }>(
   async ({ data }, { rejectWithValue }) => {
     if (data.email && data.password) {
       try {
-        const res = await fetch(`http://localhost:3000/auth/login`, {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/login`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -90,7 +90,7 @@ export const fetchSignup = createAsyncThunk<User | null, { data: FormSubmit }>(
   async ({ data }, { rejectWithValue }) => {
     if (data.email && data.password) {
       try {
-        const res = await fetch(`http://localhost:3000/auth/signup`, {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/signup`, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -123,13 +123,16 @@ export const fetchForgotPassword = createAsyncThunk<
 >("user/fetchForgotPassword", async ({ data }, { rejectWithValue }) => {
   if (data.email) {
     try {
-      const res = await fetch(`http://localhost:3000/auth/forgot-password`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND}/auth/forgot-password`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
       if (res) {
         const resParse = await res.json();
 
@@ -155,14 +158,17 @@ export const fetchUpdatePassword = createAsyncThunk<
 >("user/fetchUpdatePassword", async ({ data }, { rejectWithValue }) => {
   if (data.password && data.confirm && data.accessToken && data.refreshToken) {
     try {
-      const res = await fetch(`http://localhost:3000/auth/update-password`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND}/auth/update-password`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.accessToken}`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        }
+      );
       if (res) {
         const resParse = await res.json();
 
@@ -187,13 +193,16 @@ export const fetchSignoutUser = createAsyncThunk<string, string>(
   async (accessToken, { rejectWithValue }) => {
     if (accessToken) {
       try {
-        const res = await fetch(`http://localhost:3000/auth/signout`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          method: "POST",
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_BACKEND}/auth/signout`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            method: "POST",
+          }
+        );
         if (res) {
           const resParse = await res.json();
 

@@ -30,7 +30,7 @@ export const fetchUserChores = createAsyncThunk<
   { accessToken: string }
 >("chore/fetchUserChores", async ({ accessToken }, { rejectWithValue }) => {
   try {
-    const res = await fetch("http://localhost:3000/chores", {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND}/chores`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -61,7 +61,7 @@ export const fetchPublicChores = createAsyncThunk<
   { accessToken: string }
 >("chore/fetchPublicChores", async ({ accessToken }, { rejectWithValue }) => {
   try {
-    const res = await fetch("http://localhost:3000/chores/public", {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND}/chores/public`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -92,14 +92,17 @@ export const updateChore = createAsyncThunk<
   { chore: Chore; accessToken: string }
 >("chore/updateChore", async ({ chore, accessToken }, { rejectWithValue }) => {
   try {
-    const res = await fetch(`http://localhost:3000/chores/${chore.id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      method: "PUT",
-      body: JSON.stringify(chore),
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_BACKEND}/chores/${chore.id}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        method: "PUT",
+        body: JSON.stringify(chore),
+      }
+    );
 
     if (!res) {
       throw new Error("fetch failed");
@@ -126,13 +129,16 @@ export const deleteChore = createAsyncThunk<
   "chore/deleteChore",
   async ({ choreId, accessToken }, { rejectWithValue }) => {
     try {
-      const res = await fetch(`http://localhost:3000/chores/${choreId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND}/chores/${choreId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          method: "DELETE",
+        }
+      );
 
       if (!res) {
         throw new Error("fetch failed");
@@ -158,7 +164,7 @@ export const createChore = createAsyncThunk<
   { chore: Chore; accessToken: string }
 >("chore/createChore", async ({ chore, accessToken }, { rejectWithValue }) => {
   try {
-    const res = await fetch("http://localhost:3000/chores", {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND}/chores`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -196,7 +202,7 @@ export const completeChore = createAsyncThunk<
       todayDate.setHours(0, 0, 0, 0);
 
       const res = await fetch(
-        `http://localhost:3000/chores/complete/${choreId}`,
+        `${import.meta.env.VITE_BACKEND}/chores/complete/${choreId}`,
         {
           headers: {
             "Content-Type": "application/json",

@@ -28,7 +28,7 @@ export const fetchGetUserProfile = createAsyncThunk<
   "userProfile/fetchGetUserProfile",
   async ({ accessToken }, { rejectWithValue }) => {
     try {
-      const res = await fetch("http://localhost:3000/user-profile", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND}/user-profile`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -89,7 +89,7 @@ export const fetchPostUserProfile = createAsyncThunk<
       if (level_up_increase !== undefined) {
         updateProps.level_up_increase = level_up_increase;
       }
-      const res = await fetch("http://localhost:3000/user-profile", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND}/user-profile`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
@@ -129,7 +129,7 @@ export const fetchUserAchievements = createAsyncThunk<
   "userProfile/fetchUserAchievements",
   async ({ accessToken }, { rejectWithValue }) => {
     try {
-      const res = await fetch("http://localhost:3000/achievement", {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND}/achievement`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
