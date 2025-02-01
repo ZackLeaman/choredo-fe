@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPublicChores, selectPublicChores } from "../../slices/choreSlice";
-import { selectUser, selectUserSession } from "../../slices";
+import { selectUser, selectUserSession, fetchPublicChores, selectPublicChores  } from "@/slices";
 import './browseChoresPage.component.css';
-import { Chore } from "../../models";
+import { Chore } from "@/models";
 import { useNavigate } from "react-router";
 
 const BrowseChoresPage: React.FC = () => {

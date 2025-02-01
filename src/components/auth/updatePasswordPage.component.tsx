@@ -1,15 +1,15 @@
 import { SubmitHandler } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { FormInput, FormSubmit } from "../../models";
-import FormComponent from "../shared/form.component";
+import { FormInput, FormSubmit } from "@/models";
+import FormComponent from "@/components/shared/form.component";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUpdatePassword,
   resetError,
   selectUserError,
   selectUserStatus,
-} from "../../slices";
-import { AsyncStatus } from "../../enums/asyncStatus";
+} from "@/slices";
+import { AsyncStatus } from "@/enums/asyncStatus";
 import { useNavigate, useParams } from "react-router";
 
 const UpdatePasswordPage: React.FC = () => {

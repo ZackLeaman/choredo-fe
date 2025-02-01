@@ -1,8 +1,8 @@
 import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { FormSubmit } from "../models";
-import { AsyncStatus } from "../enums/asyncStatus";
-import { createAppSlice } from "../store/createAppSlice";
 import { Session, User } from "@supabase/supabase-js";
+import { FormSubmit } from "@/models";
+import { AsyncStatus } from "@/enums/asyncStatus";
+import { createAppSlice } from "@/store/createAppSlice";
 
 export interface UserSliceState {
   data: { user: User; session: Session };

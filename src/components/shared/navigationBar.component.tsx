@@ -6,10 +6,10 @@ import {
   selectUserProfileLevel,
   selectUserProfileProgress,
   selectUserSession,
-} from "../../slices";
+} from "@/slices";
 import "./navigationBar.component.css";
 import { useEffect } from "react";
-import { USER_PROGRESS_MAX } from "../../utils/userLevel";
+import { USER_PROGRESS_MAX } from "@/utils/userLevel";
 
 export interface NavigationBarProps {
   logout: () => void;

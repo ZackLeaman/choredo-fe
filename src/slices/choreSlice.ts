@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createAppSlice } from "../store/createAppSlice";
-import { AsyncStatus } from "../enums/asyncStatus";
-import { Chore, ChoreStateData, ChoreStatus } from "../models";
+import { createAppSlice } from "@/store/createAppSlice";
+import { AsyncStatus } from "@/enums/asyncStatus";
+import { Chore, ChoreStateData, ChoreStatus } from "@/models";
 
 export interface ChoresSliceState {
   data: ChoreStateData;

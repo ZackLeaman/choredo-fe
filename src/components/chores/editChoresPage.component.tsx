@@ -9,12 +9,12 @@ import {
   selectPublicChores,
   selectUserChores,
   updateChore,
-} from "../../slices/choreSlice";
-import { AsyncStatus } from "../../enums/asyncStatus";
+} from "@/slices/choreSlice";
+import { AsyncStatus } from "@/enums/asyncStatus";
 import { useNavigate, useParams } from "react-router";
-import FormComponent from "../shared/form.component";
-import { FormInput, FormSubmit } from "../../models";
-import { selectUserSession } from "../../slices";
+import FormComponent from "@/components/shared/form.component";
+import { FormInput, FormSubmit } from "@/models";
+import { selectUserSession } from "@/slices";
 
 const EditChoresPage: React.FC = () => {
   const dispatch = useDispatch();

@@ -1,7 +1,7 @@
 import { createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { createAppSlice } from "../store/createAppSlice";
-import { AsyncStatus } from "../enums/asyncStatus";
-import { UserProfileData } from "../models";
+import { createAppSlice } from "@/store/createAppSlice";
+import { AsyncStatus } from "@/enums/asyncStatus";
+import { UserProfileData } from "@/models";
 
 export interface UserProfileSliceState {
   data: UserProfileData;

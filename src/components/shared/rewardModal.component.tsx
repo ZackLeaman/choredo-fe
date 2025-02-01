@@ -4,7 +4,7 @@ import {
   fetchPostUserProfile,
   selectUserProfile,
   selectUserSession,
-} from "../../slices";
+} from "@/slices";
 import { useEffect, useState } from "react";
 import './rewardModal.component.css';
 

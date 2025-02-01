@@ -1,13 +1,13 @@
 import { Route, Routes, useNavigate } from "react-router";
-import NavigationBar from "../components/shared/navigationBar.component";
-import MyChoresPage from "../components/chores/myChoresPage.component";
-import BrowseChoresPage from "../components/chores/browseChoresPage.component";
-import EditChoresPage from "../components/chores/editChoresPage.component";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSignoutUser, selectUserSession, selectUserStatus } from "../slices";
-import { AsyncStatus } from "../enums/asyncStatus";
-import AchievementsPage from "../components/achievements/achievementsPage.component";
-import RewardModalComponent from "../components/shared/rewardModal.component";
+import NavigationBar from "@/components/shared/navigationBar.component";
+import MyChoresPage from "@/components/chores/myChoresPage.component";
+import BrowseChoresPage from "@/components/chores/browseChoresPage.component";
+import EditChoresPage from "@/components/chores/editChoresPage.component";
+import { fetchSignoutUser, selectUserSession, selectUserStatus } from "@/slices";
+import { AsyncStatus } from "@/enums/asyncStatus";
+import AchievementsPage from "@/components/achievements/achievementsPage.component";
+import RewardModalComponent from "@/components/shared/rewardModal.component";
 
 const AuthedRoutes: React.FC = () => {
   const dispatch = useDispatch();

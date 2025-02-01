@@ -6,20 +6,20 @@ import {
   resetStatus,
   selectChoreStatus,
   selectUserChores,
-} from "../../slices/choreSlice";
+} from "@/slices/choreSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncStatus } from "../../enums/asyncStatus";
-import { Chore } from "../../models";
+import { AsyncStatus } from "@/enums/asyncStatus";
+import { Chore } from "@/models";
 import { useNavigate } from "react-router";
 import {
   fetchPostUserProfile,
   selectUser,
   selectUserProfile,
   selectUserSession,
-} from "../../slices";
+} from "@/slices";
 import "./myChoresPage.component.css";
-import { updateUserProgress } from "../../utils/userLevel";
-import ChoreWithOptionsComponent from "../shared/choreWithOptions.component";
+import { updateUserProgress } from "@/utils/userLevel";
+import ChoreWithOptionsComponent from "@/components/shared/choreWithOptions.component";
 
 const MyChoresPage: React.FC = () => {
   const user = useSelector(selectUser);

@@ -1,10 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchUserAchievements,
-  selectUserProfile,
-  selectUserSession,
-} from "../../slices";
+import { fetchUserAchievements, selectUserProfile, selectUserSession } from "@/slices";
 
 const AchievementsPage: React.FC = () => {
   const session = useSelector(selectUserSession);

@@ -1,4 +1,4 @@
-import { AsyncStatus } from "../enums/asyncStatus";
+import { AsyncStatus } from "@/enums/asyncStatus";
 
 export interface ChoreStatus {
   fetchUserChores: AsyncStatus;

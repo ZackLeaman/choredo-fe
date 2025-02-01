@@ -1,7 +1,7 @@
 import { SubmitHandler } from "react-hook-form";
-import { FormInput, FormSubmit } from "../../models";
+import { FormInput, FormSubmit } from "@/models";
 import { NavLink, useLocation, useNavigate } from "react-router";
-import FormComponent from "../shared/form.component";
+import FormComponent from "@/components/shared/form.component";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchLogin,
@@ -9,8 +9,8 @@ import {
   resetError,
   selectUserError,
   selectUserStatus,
-} from "../../slices";
-import { AsyncStatus } from "../../enums/asyncStatus";
+} from "@/slices";
+import { AsyncStatus } from "@/enums/asyncStatus";
 import { useEffect } from "react";
 
 interface LoginSignupPageProps {

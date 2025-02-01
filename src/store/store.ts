@@ -5,7 +5,7 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { choreSlice, userSlice, userProfileSlice } from "../slices";
+import { choreSlice, userSlice, userProfileSlice } from "@/slices";
 
 const rootReducer = combineSlices(userSlice, choreSlice, userProfileSlice);
 

@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router";
-import UpdatePasswordPage from "../components/auth/updatePasswordPage.component";
-import LoginSignupPage from "../components/auth/loginSignupPage.component";
-import ForgotPasswordPage from "../components/auth/forgotPasswordPage.component";
+import UpdatePasswordPage from "@/components/auth/updatePasswordPage.component";
+import LoginSignupPage from "@/components/auth/loginSignupPage.component";
+import ForgotPasswordPage from "@/components/auth/forgotPasswordPage.component";
 
 const UnauthedRoutes: React.FC = () => {
   return (

@@ -1,6 +1,5 @@
 import { NavLink } from "react-router";
-import FormComponent from "../shared/form.component";
-import { FormInput, FormSubmit } from "../../models";
+import { FormInput, FormSubmit } from "@/models";
 import { SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -8,9 +7,10 @@ import {
   resetError,
   selectUserError,
   selectUserStatus,
-} from "../../slices";
-import { AsyncStatus } from "../../enums/asyncStatus";
+} from "@/slices";
 import { useEffect } from "react";
+import { AsyncStatus } from "@/enums/asyncStatus";
+import FormComponent from "@/components/shared/form.component";
 
 const ForgotPasswordPage: React.FC = () => {
   const dispatch = useDispatch();

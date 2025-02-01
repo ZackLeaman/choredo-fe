@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { FormInput, FormSubmit } from "../../models";
+import { FormInput, FormSubmit } from "@/models";
 import { useEffect } from "react";
 
 interface FormComponentProps {

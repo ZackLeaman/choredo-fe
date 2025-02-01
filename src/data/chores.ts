@@ -1,4 +1,4 @@
-import { Chore } from "../models";
+import { Chore } from "@/models";
 
 const MockChores: Chore[] = [
   {

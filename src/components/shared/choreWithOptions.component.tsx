@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { Chore } from "../../models";
+import { Chore } from "@/models";
 import { usePopper } from "react-popper";
 
 interface ChoreWithOptionsComponentProps {
