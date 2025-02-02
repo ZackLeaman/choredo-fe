@@ -10,9 +10,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Place all JS files inside the 'assets' folder
-        assetFileNames: "choredo_fe/assets/[name].[ext]", // Static assets (CSS, images, etc.)
-        chunkFileNames: "choredo_fe/assets/[name].[js]", // JavaScript chunks
-        entryFileNames: "choredo_fe/assets/[name].js", // Main entry JS file
+        assetFileNames: "[name].[ext]", // Static assets (CSS, images, etc.)
+        chunkFileNames: "[name].[js]", // JavaScript chunks
+        entryFileNames: "[name].js", // Main entry JS file
       },
     },
   },
