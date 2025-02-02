@@ -24,7 +24,7 @@ const BrowseChoresPage: React.FC = () => {
   return (
     <>
       <h1 className="mb-6 mt-14">Browse Chores</h1>
-      <section className="flex flex-wrap justify-center mb-20">
+      <section className="flex flex-wrap justify-center mb-20 px-10">
         {user &&
           chores &&
           chores.map((c, index) => (

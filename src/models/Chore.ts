@@ -6,4 +6,5 @@ export interface Chore {
   frequency_days: number;
   public: boolean;
   username?: string;
+  due_on?: string;
 }

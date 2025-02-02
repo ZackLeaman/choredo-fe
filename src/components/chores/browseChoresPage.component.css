@@ -1,7 +1,8 @@
 .chore {
   position: relative;
   margin-left: 6rem;
-  
+  max-width: 30rem;
+
   .complete {
     position: absolute;
     top: -0.1rem;
@@ -30,6 +31,13 @@
 
     &:focus-visible {
       border: 0.2rem solid #fff;
+    }
+
+    &:disabled {
+      box-shadow: 0 0.3rem 0 #336804;
+      border: none;
+      outline: none;
+      bottom: 0.15rem;
     }
   }
 }

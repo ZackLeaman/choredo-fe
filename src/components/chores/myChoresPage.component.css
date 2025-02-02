@@ -1,6 +1,7 @@
 .chore {
   position: relative;
   margin-left: 8rem;
+  max-width: 30rem;
 
   .options-popover {
     padding: 0.5rem;

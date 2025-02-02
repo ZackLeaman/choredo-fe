@@ -30,6 +30,13 @@ const MyChoresPage: React.FC = () => {
   const userProfile = useSelector(selectUserProfile);
   const navigate = useNavigate();
 
+  const organizedChores = chores.map(c => {
+    const dueOn = new Date(c.completed_on);
+    dueOn.setDate(dueOn.getDate() + c.frequency_days);
+
+    return {...c, due_on: dueOn.toISOString().split('T')[0]};
+  }).sort((a, b) => ((new Date(a.due_on)).getTime() - (new Date(b.due_on)).getTime()));
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dispatch(fetchUserChores({ accessToken: session.access_token }) as any);
@@ -69,6 +76,7 @@ const MyChoresPage: React.FC = () => {
       chore.frequency_days
     );
 
+    dispatch(fetchUserChores({accessToken: session.access_token}) as any)
     dispatch(
       fetchPostUserProfile({
         accessToken: session.access_token,
@@ -84,10 +92,10 @@ const MyChoresPage: React.FC = () => {
   return (
     <>
       <h1 className="mb-6 mt-14">My Chores</h1>
-      <section className="flex flex-wrap justify-center gap-10 mb-20">
+      <section className="flex flex-wrap justify-center gap-10 mb-20 px-10">
         {user &&
-          chores &&
-          chores.map((c, index) => (
+          organizedChores &&
+          organizedChores.map((c, index) => (
             <ChoreWithOptionsComponent
               key={`${c.id}-${index}`}
               chore={c}

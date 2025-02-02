@@ -1,7 +1,7 @@
 #root {
-  /* max-width: 1280px; */
   margin: 0 auto;
   text-align: center;
+  padding-bottom: 3rem;
 }
 
 .logo {
@@ -104,4 +104,24 @@ div:nth-child(4n-2) > .achievement-reflection {
 div:nth-child(4n-3) > .achievement,
 div:nth-child(4n-3) > .achievement-reflection {
   animation-delay: -1.5s;
+}
+
+
+@media screen and (max-width: 720px) {
+  h1 {
+    padding-inline: 1rem;
+    font-size: 2rem;
+  }
+
+  .card {
+    min-width: calc(100% - 4rem);
+
+    section {
+      flex-wrap: wrap;
+    }
+  }
+
+  nav > a {
+    font-size: 0.8rem;
+  }
 }

@@ -37,13 +37,22 @@ const ChoreWithOptionsComponent: React.FC<ChoreWithOptionsComponentProps> = ({
     setIsOptionsOpen((cur: boolean) => !cur);
   }, []);
 
+  const todaysDate = new Date();
+  todaysDate.setHours(0, 0, 0, 0);
+  const todaysDateStr = todaysDate.toISOString().split("T")[0];
+  const dueDate = new Date(chore.due_on ?? "");
+  dueDate.setHours(0, 0, 0, 0);
+
   return (
     <div className="card chore">
       <button
-        className="complete bg-lime-600"
+        className={`complete ${
+          chore.completed_on === todaysDateStr ? "bg-green-900" : "bg-lime-600"
+        }`}
+        disabled={chore.completed_on === todaysDateStr}
         onClick={() => onCompleteHandler(chore)}
       >
-        Complete
+        {chore.completed_on === todaysDateStr ? "DONE!" : "Complete"}
       </button>
       <button
         ref={setPopoverRef}
@@ -83,6 +92,13 @@ const ChoreWithOptionsComponent: React.FC<ChoreWithOptionsComponentProps> = ({
         </ul>
       )}
       <h2>Name: {chore.name}</h2>
+      <h2
+        className={`${
+          dueDate.getTime() <= todaysDate.getTime() ? "bg-red-900" : ""
+        }`}
+      >
+        Due On: {chore.due_on}
+      </h2>
       <p>Frequency: {chore.frequency_days} days</p>
       <p>Last Completed: {chore.completed_on}</p>
       <p>Description: {chore.description}</p>
