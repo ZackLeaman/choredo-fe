@@ -1,10 +1,21 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: "public/choredo-fe/*", // Source path (images in public/choredo-fe)
+          dest: "", // Destination path in build output (directly inside dist)
+        },
+      ],
+    }),
+  ],
   build: {
     outDir: "dist", // Set the main output directory
     rollupOptions: {
