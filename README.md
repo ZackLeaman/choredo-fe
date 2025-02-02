@@ -1,6 +1,6 @@
 ![image](https://github.com/user-attachments/assets/bec5ff9d-9776-418d-a0b4-c9028e405f17)
 
-# Choredo Web App
+# Choredo - The Chore TODO Web App
 
 This is a chore todo web app to track, complete, and manage chores. Users can also browse and clone public chores from the community, and earn rewards for completing their reoccurring chores.
 
