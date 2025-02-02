@@ -65,7 +65,7 @@ const UpdatePasswordPage: React.FC = () => {
   return (
     <div className="mt-20">
       <div className="flex flex-col gap-2 items-center justify-center">
-        <img className="icon" src="/creature-icon.jpg" />
+        <img className="icon" src="/choredo-fe/creature-icon.jpg" />
         <h1 className="text-left">Choredos - Update Password</h1>
       </div>
       <section className="flex justify-center">

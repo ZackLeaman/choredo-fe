@@ -54,7 +54,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ logout, loading }) => {
     <header>
       <section className="flex justify-between items-end py-3 p-6 pt-10 chore-header">
         <div className="flex gap-2 items-end">
-          <img className="icon" src="/creature-icon.jpg" />
+          <img className="icon" src="/choredo-fe/creature-icon.jpg" />
           <h1 className="text-left">Choredo</h1>
         </div>
         <div className="flex flex-nowrap items-center gap-2 user-profile">
