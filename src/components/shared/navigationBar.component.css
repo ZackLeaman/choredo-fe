@@ -4,6 +4,20 @@
   border-radius: 1rem;
 }
 
+.weather-widget {
+  transform-origin: top left;
+  transform: scale(0.7);
+  position: absolute;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+
+  span {
+    background-color: rgba(20,20,20, 0.8);
+    padding: 0.1rem 0.3rem;
+    border-radius: 0.5rem;
+  }
+}
+
 .chore-header {
   background: url("/choredo-fe/backdrop.jpg");
   object-fit: cover;

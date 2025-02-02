@@ -10,6 +10,7 @@ import {
 import "./navigationBar.component.css";
 import { useEffect } from "react";
 import { USER_PROGRESS_MAX } from "@/utils/userLevel";
+import { WeatherWidget } from "@daniel-szulc/react-weather-widget";
 
 export interface NavigationBarProps {
   logout: () => void;
@@ -52,6 +53,15 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ logout, loading }) => {
 
   return (
     <header>
+      <div className="weather-widget">
+        <span>
+          Thank you Daniel Szulc for this weather component!{" "}
+          <a href="https://github.com/daniel-szulc/react-weather-widget" target="_blank">
+            Visit their project here
+          </a>
+        </span>
+        <WeatherWidget autoLocate="gps" tempUnit="F" windSpeedUnit="mph" />
+      </div>
       <section className="flex justify-between items-end py-3 p-6 pt-10 chore-header">
         <div className="flex gap-2 items-end">
           <img className="icon" src="/choredo-fe/creature-icon.jpg" />
@@ -86,7 +96,11 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ logout, loading }) => {
             </NavLink>
           ))}
       </nav>
-      <button className="btn btn-logout bg-green-700" onClick={logout} disabled={loading}>
+      <button
+        className="btn btn-logout bg-green-700"
+        onClick={logout}
+        disabled={loading}
+      >
         Logout
       </button>
     </header>
