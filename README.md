@@ -8,6 +8,9 @@ This is a chore todo web app to track, complete, and manage chores. Users can al
 
 This project is a Vite-powered TypeScript application designed to run on Node.js 20. It includes various configurations to serve the app locally and build for production. 
 
+## Hosted on GitHub Pages
+https://zackleaman.github.io/choredo-fe/
+
 ## Features
 
 - **Development Mode**: Runs locally with backend running locally on `localhost:7730`.
