@@ -6,7 +6,15 @@ import path from "path";
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: "dist/choredo_fe", // Set the main output directory
+    outDir: "dist", // Set the main output directory
+    rollupOptions: {
+      output: {
+        // Place all JS files inside the 'assets' folder
+        assetFileNames: "choredo_fe/assets/[name].[ext]", // Static assets (CSS, images, etc.)
+        chunkFileNames: "choredo_fe/assets/[name].[js]", // JavaScript chunks
+        entryFileNames: "choredo_fe/assets/[name].js", // Main entry JS file
+      },
+    },
   },
   resolve: {
     alias: {
