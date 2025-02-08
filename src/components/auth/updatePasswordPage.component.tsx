@@ -1,5 +1,5 @@
 import { SubmitHandler } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FormInput, FormSubmit } from "@/models";
 import FormComponent from "@/components/shared/form.component";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,8 +19,6 @@ const UpdatePasswordPage: React.FC = () => {
   const status = useSelector(selectUserStatus);
   const navigate = useNavigate();
   const { email, access_token, refresh_token } = useParams();
-  // const [accessToken, setAccessToken] = useState<string | null>(null);
-  // const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -29,30 +27,6 @@ const UpdatePasswordPage: React.FC = () => {
     if (!email || !access_token || refresh_token) {
       navigate('/');
     }
-
-    // const hash = window.location.hash;
-
-    // if (hash) {
-    //   const params = new URLSearchParams(hash.substring(1)); // Remove the '#' character
-
-    //   // Extract access token and refresh token
-    //   const aToken = params.get("access_token");
-    //   const rToken = params.get("refresh_token");
-
-    //   // Set the tokens in state
-    //   if (aToken) {
-    //     setAccessToken(aToken);
-    //   }
-    //   if (rToken) {
-    //     setRefreshToken(rToken);
-    //   }
-
-    //   if (!aToken || !rToken) {
-    //     navigate('/');
-    //   }
-    // } else {
-    //   navigate('/');
-    // }
   }, [dispatch]);
 
   const onSubmitHandler: SubmitHandler<FormSubmit> = async (
