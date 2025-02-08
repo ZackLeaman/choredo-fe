@@ -41,6 +41,12 @@ const UpdatePasswordPage: React.FC = () => {
       if (rToken) {
         setRefreshToken(rToken);
       }
+      
+      if (!aToken || !rToken) {
+        navigate('/');
+      }
+    } else {
+      navigate('/');
     }
   }, [dispatch]);
 
