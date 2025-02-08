@@ -23,8 +23,8 @@ const UpdatePasswordPage: React.FC = () => {
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dispatch(resetError() as any);
-
-    if (!email || !access_token || refresh_token) {
+      
+    if (!email || !access_token || !refresh_token) {
       navigate('/');
     }
   }, [dispatch]);

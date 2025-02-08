@@ -24,19 +24,21 @@ const LoginSignupPage: React.FC<LoginSignupPageProps> = ({ isSignup }) => {
   const error = useSelector(selectUserError);
   const status = useSelector(selectUserStatus);
   
-  const { email } = useParams();
   useEffect(() => {
     const hash = window.location.hash;
-
-    if (hash) {
-      const params = new URLSearchParams(hash.substring(1)); // Remove the '#' character
-
+    const search = window.location.search;
+    
+    if (hash && search) {
+      const searchParams = new URLSearchParams(search.substring(1)); // Remove the '?' character
+      const hashParams = new URLSearchParams(hash.substring(1)); // Remove the '#' character
+      
       // Extract access token and refresh token
-      const aToken = params.get("access_token");
-      const rToken = params.get("refresh_token");
+      const email = searchParams.get("email");
+      const aToken = hashParams.get("access_token");
+      const rToken = hashParams.get("refresh_token");
 
       if (aToken && rToken && email) {
-        navigate(`/update-password?email=${email}&access_token=${aToken}&refresh_token=${rToken}`)
+        navigate(`/update-password/${email}/${aToken}/${rToken}`)
       }
     }
   }, []);
