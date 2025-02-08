@@ -1,6 +1,6 @@
 import { SubmitHandler } from "react-hook-form";
 import { FormInput, FormSubmit } from "@/models";
-import { NavLink, useLocation, useNavigate } from "react-router";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router";
 import FormComponent from "@/components/shared/form.component";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -23,6 +23,23 @@ const LoginSignupPage: React.FC<LoginSignupPageProps> = ({ isSignup }) => {
   const location = useLocation();
   const error = useSelector(selectUserError);
   const status = useSelector(selectUserStatus);
+  
+  const { email } = useParams();
+  useEffect(() => {
+    const hash = window.location.hash;
+
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1)); // Remove the '#' character
+
+      // Extract access token and refresh token
+      const aToken = params.get("access_token");
+      const rToken = params.get("refresh_token");
+
+      if (aToken && rToken && email) {
+        navigate(`/update-password?email=${email}&access_token=${aToken}&refresh_token=${rToken}`)
+      }
+    }
+  }, []);
 
   useEffect(() => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

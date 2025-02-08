@@ -18,45 +18,50 @@ const UpdatePasswordPage: React.FC = () => {
   const error = useSelector(selectUserError);
   const status = useSelector(selectUserStatus);
   const navigate = useNavigate();
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const { email, access_token, refresh_token } = useParams();
+  // const [accessToken, setAccessToken] = useState<string | null>(null);
+  // const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    dispatch(resetError() as any)
+    dispatch(resetError() as any);
 
-    const hash = window.location.hash;
-
-    if (hash) {
-      const params = new URLSearchParams(hash.substring(1)); // Remove the '#' character
-
-      // Extract access token and refresh token
-      const aToken = params.get("access_token");
-      const rToken = params.get("refresh_token");
-
-      // Set the tokens in state
-      if (aToken) {
-        setAccessToken(aToken);
-      }
-      if (rToken) {
-        setRefreshToken(rToken);
-      }
-      
-      if (!aToken || !rToken) {
-        navigate('/');
-      }
-    } else {
+    if (!email || !access_token || refresh_token) {
       navigate('/');
     }
+
+    // const hash = window.location.hash;
+
+    // if (hash) {
+    //   const params = new URLSearchParams(hash.substring(1)); // Remove the '#' character
+
+    //   // Extract access token and refresh token
+    //   const aToken = params.get("access_token");
+    //   const rToken = params.get("refresh_token");
+
+    //   // Set the tokens in state
+    //   if (aToken) {
+    //     setAccessToken(aToken);
+    //   }
+    //   if (rToken) {
+    //     setRefreshToken(rToken);
+    //   }
+
+    //   if (!aToken || !rToken) {
+    //     navigate('/');
+    //   }
+    // } else {
+    //   navigate('/');
+    // }
   }, [dispatch]);
 
   const onSubmitHandler: SubmitHandler<FormSubmit> = async (
     data: FormSubmit
   ) => {
-    if (accessToken && data.password && data.confirm && refreshToken) {
+    if (access_token && data.password && data.confirm && refresh_token) {
       const resultAction = await dispatch(
         fetchUpdatePassword({
-          data: { ...data, accessToken, refreshToken },
+          data: { ...data, accessToken: access_token, refreshToken: refresh_token },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }) as any
       );
