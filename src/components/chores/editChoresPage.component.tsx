@@ -47,7 +47,7 @@ const EditChoresPage: React.FC = () => {
 
   useEffect(() => {
     if (
-      (!chore && status.createChore === AsyncStatus.SUCCESSFUL) ||
+      ((!chore || copyingChore) && status.createChore === AsyncStatus.SUCCESSFUL) ||
       (chore && status.updateChore === AsyncStatus.SUCCESSFUL)
     ) {
       dispatch(resetStatus());
@@ -93,7 +93,7 @@ const EditChoresPage: React.FC = () => {
   return (
     <>
       <h1 className="mb-6 mt-14">
-        {!chore ? "Create" : "Edit"} a Chore
+        {!chore || copyingChore ? "Create" : "Edit"} a Chore
       </h1>
       <section className="flex justify-center">
         <FormComponent

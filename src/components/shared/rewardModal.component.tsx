@@ -6,7 +6,7 @@ import {
   selectUserSession,
 } from "@/slices";
 import { useEffect, useState } from "react";
-import './rewardModal.component.css';
+import "./rewardModal.component.css";
 
 const RewardModalComponent: React.FC = () => {
   const dispatch = useDispatch();
@@ -72,13 +72,19 @@ const RewardModalComponent: React.FC = () => {
   return (
     <div className="backdrop">
       <div className="modal">
+        <h1 className="modal-title">Level Up!</h1>
         {!loading && !rewardSrc && (
-          <button onClick={onClickReward}>Search the grass?</button>
+          <div>
+            <h2>Claim your reward</h2>
+            <button onClick={onClickReward}>Search the grass?</button>
+          </div>
         )}
         {loading && <div>Something is moving in the grass...</div>}
         {!loading && rewardSrc && (
           <div>
-            <button className="btn-close bg-red-600" onClick={onClose}>X</button>
+            <button className="btn-close bg-red-600" onClick={onClose}>
+              X
+            </button>
             <div style={{ position: "relative" }}>
               <img className="achievement-reflection" src={rewardSrc} />
               <img className="achievement" src={rewardSrc} />

@@ -18,7 +18,7 @@ import {
   selectUserSession,
 } from "@/slices";
 import "./myChoresPage.component.css";
-import { updateUserProgress } from "@/utils/userLevel";
+import { updateUserProgress, USER_PROGRESS_MAX } from "@/utils/userLevel";
 import ChoreWithOptionsComponent from "@/components/shared/choreWithOptions.component";
 
 const MyChoresPage: React.FC = () => {
@@ -73,7 +73,7 @@ const MyChoresPage: React.FC = () => {
     const { level, progress } = updateUserProgress(
       userProfile.level,
       userProfile.progress,
-      chore.frequency_days
+      Math.max(chore.frequency_days, USER_PROGRESS_MAX)
     );
 
     dispatch(fetchUserChores({accessToken: session.access_token}) as any)
