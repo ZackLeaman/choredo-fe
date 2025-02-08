@@ -1,6 +1,6 @@
 import { SubmitHandler } from "react-hook-form";
 import { FormInput, FormSubmit } from "@/models";
-import { NavLink, useLocation, useNavigate, useParams } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import FormComponent from "@/components/shared/form.component";
 import { useDispatch, useSelector } from "react-redux";
 import {
