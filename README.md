@@ -11,6 +11,9 @@ This project is a Vite-powered TypeScript application designed to run on Node.js
 ## Hosted on GitHub Pages
 https://zackleaman.github.io/choredo-fe/
 
+## Backend Repository
+https://github.com/ZackLeaman/choredo-be
+
 ## Features
 
 - **Development Mode**: Runs locally with backend running locally on `localhost:7730`.
