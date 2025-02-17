@@ -73,7 +73,7 @@ const MyChoresPage: React.FC = () => {
     const { level, progress } = updateUserProgress(
       userProfile.level,
       userProfile.progress,
-      Math.max(chore.frequency_days, USER_PROGRESS_MAX)
+      Math.min(chore.frequency_days, USER_PROGRESS_MAX)
     );
 
     dispatch(fetchUserChores({accessToken: session.access_token}) as any)
