@@ -16,6 +16,7 @@
     --secondary-variant: #f38c79;
     --background: var(--white);
     --surface: var(--white);
+    --faded: #adb4b4;
     --error: #b00020;
     --text-primary: var(--white);
     --text-secondary: var(--white);
@@ -48,6 +49,7 @@
             padding: 0.8rem 0;
             color: var(--text-primary);
             text-shadow: 0rem 0rem 0.4rem var(--primary-variant);
+            min-width: 40rem;
         }
 
         button {
@@ -138,6 +140,17 @@
                     top: calc(50% - 0.15rem);
                     left: 0.1rem;
                     background: var(--text-surface);
+                }
+            }
+        }
+
+        &.content.faded {
+            background: var(--faded);
+            color: var(--text-primary);
+
+            .calendar-day-event {
+                &::before {
+                    background: var(--text-primary);
                 }
             }
         }
