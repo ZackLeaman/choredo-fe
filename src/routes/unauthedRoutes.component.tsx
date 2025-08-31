@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router";
 import UpdatePasswordPage from "@/components/auth/updatePasswordPage.component";
 import LoginSignupPage from "@/components/auth/loginSignupPage.component";
 import ForgotPasswordPage from "@/components/auth/forgotPasswordPage.component";
+import CalendarPage from "@/components/calendar/CalendarPage.component";
 
 const UnauthedRoutes: React.FC = () => {
   return (
@@ -10,6 +11,7 @@ const UnauthedRoutes: React.FC = () => {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/signup" element={<LoginSignupPage isSignup={true} />} />
       <Route path="*" element={<LoginSignupPage />} />
+      <Route path="/playground" element={<CalendarPage />} />
     </Routes>
   );
 };
