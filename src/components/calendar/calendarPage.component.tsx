@@ -10,26 +10,36 @@ import "./calendarPage.component.css";
 import moment from "moment";
 
 const CalendarPage: React.FC = () => {
-  const [cellContent, setCellContent] = useState([] as { id: number, year: number, month: number, day: number }[]);
+  const [cellContent, setCellContent] = useState(
+    [] as { id: number; year: number; month: number; day: number }[]
+  );
   const [rowSelectors, setRowSelectors] = useState([] as number[]);
   const [isDragging, setIsDragging] = useState(false);
   const [selectedDates, setSelectedDates] = useState([] as number[]);
-  const [rowSelectorsSelected, setRowSelectorsSelected] = useState([] as boolean[]);
-  const [dateData, setDateData] = useState({ monthText: '', monthValue: 0, date: '', yearText: '', isCurrentYear: false })
+  const [rowSelectorsSelected, setRowSelectorsSelected] = useState(
+    [] as boolean[]
+  );
+  const [dateData, setDateData] = useState({
+    monthText: "",
+    monthValue: 0,
+    date: "",
+    yearText: "",
+    isCurrentYear: false,
+  });
   const [todayCellId, setTodayCellId] = useState(-1);
   const daysShown = 7;
   const weeksShown = 6;
   const cellHeader = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  
+
   useEffect(() => {
     // TODO except a prop to determine which starting focus date
-    const date = moment().format('YYYY-MM-DD');
+    const date = moment().format("YYYY-MM-DD");
     setDateData({
-      monthText: moment().format('MMMM'),
-      monthValue: +moment().format('MM'),
+      monthText: moment().format("MMMM"),
+      monthValue: +moment().format("MM"),
       date,
-      yearText: date.split('-')[0],
-      isCurrentYear: true
+      yearText: date.split("-")[0],
+      isCurrentYear: true,
     });
 
     const handleMouseUp = () => {
@@ -44,10 +54,10 @@ const CalendarPage: React.FC = () => {
 
   useEffect(() => {
     const focusedDate = moment(dateData.date);
-    const startMonth = focusedDate.startOf('month');
-    const startMonthDay = +startMonth.format('d');
+    const startMonth = focusedDate.startOf("month");
+    const startMonthDay = +startMonth.format("d");
     const dayOffset = startMonthDay === 0 ? 7 : startMonthDay;
-    let dateCycler = startMonth.subtract(dayOffset, 'days');
+    let dateCycler = startMonth.subtract(dayOffset, "days");
     const newCellContent = [];
     const newRowSelectors = [];
     let todayCellId = -1;
@@ -57,8 +67,13 @@ const CalendarPage: React.FC = () => {
         if (todayCellId === -1 && dateCycler.isSame(new Date(), "day")) {
           todayCellId = id;
         }
-        newCellContent.push({ id, year: +dateCycler.format('YYYY'), month: +dateCycler.format('MM'), day: +dateCycler.format('DD') });
-        dateCycler = dateCycler.add(1, 'days');
+        newCellContent.push({
+          id,
+          year: +dateCycler.format("YYYY"),
+          month: +dateCycler.format("MM"),
+          day: +dateCycler.format("DD"),
+        });
+        dateCycler = dateCycler.add(1, "days");
       }
       newRowSelectors.push(w);
     }
@@ -66,12 +81,12 @@ const CalendarPage: React.FC = () => {
     setRowSelectors(newRowSelectors);
     setRowSelectorsSelected(newRowSelectors.map(() => false));
     setTodayCellId(todayCellId);
-  }, [dateData])
+  }, [dateData]);
 
   const handleMouseDown = (buttonId: number) => {
     setSelectedDates([buttonId]);
     setIsDragging(true);
-    setRowSelectorsSelected(prevSelectors => prevSelectors.map(() => false));
+    setRowSelectorsSelected((prevSelectors) => prevSelectors.map(() => false));
   };
 
   const handleMouseMove = (buttonId: number) => {
@@ -121,10 +136,10 @@ const CalendarPage: React.FC = () => {
       });
     }
 
-    setRowSelectorsSelected(prevSelectors => {
-        const newSelectors = [...prevSelectors];
-        newSelectors[index] = isChecked;
-        return newSelectors;
+    setRowSelectorsSelected((prevSelectors) => {
+      const newSelectors = [...prevSelectors];
+      newSelectors[index] = isChecked;
+      return newSelectors;
     });
 
     if (selectedDates.length !== newSelectedDates.length) {
@@ -133,23 +148,27 @@ const CalendarPage: React.FC = () => {
   };
 
   const handleMonthCycle = (offset: number) => {
-    const newDate = moment(dateData.date).add(offset, 'months').format('YYYY-MM-DD');
+    const newDate = moment(dateData.date)
+      .add(offset, "months")
+      .format("YYYY-MM-DD");
     setDateData({
-      monthText: moment(newDate).format('MMMM'),
-      monthValue: +moment(newDate).format('MM'),
+      monthText: moment(newDate).format("MMMM"),
+      monthValue: +moment(newDate).format("MM"),
       date: newDate,
-      yearText: newDate.split('-')[0],
-      isCurrentYear: newDate.split('-')[0] === moment().format('YYYY')
-    })
-  }
+      yearText: newDate.split("-")[0],
+      isCurrentYear: newDate.split("-")[0] === moment().format("YYYY"),
+    });
+  };
 
   return (
     <section className="main">
       <div className="calendar-grid">
         <div className="calendar-title">
-          <button onClick={() => handleMonthCycle(-1)}>{`<`}</button>
-          <h1>{`${dateData.monthText}${!dateData.isCurrentYear ? ' ' + dateData.yearText : ''}`}</h1>
-          <button onClick={() => handleMonthCycle(1)}>{`>`}</button>
+          <button onClick={() => handleMonthCycle(-1)}></button>
+          <h1>{`${dateData.monthText}${
+            !dateData.isCurrentYear ? " " + dateData.yearText : ""
+          }`}</h1>
+          <button onClick={() => handleMonthCycle(1)}></button>
         </div>
         {cellHeader &&
           cellHeader.map((cell, index) => (
@@ -169,7 +188,9 @@ const CalendarPage: React.FC = () => {
                 selectedDates.includes(index) ? "highlight" : ""
               } ${cellContent.length - 1 === index ? "bottom-right" : ""} ${
                 cellContent.length - daysShown === index ? "bottom-left" : ""
-              } ${todayCellId === index ? "current-day" : ""} ${dateData.monthValue !== cell.month ? 'faded' : ''}`}
+              } ${todayCellId === index ? "current-day" : ""} ${
+                dateData.monthValue !== cell.month ? "faded" : ""
+              }`}
               onMouseDown={() => handleMouseDown(cell.id)}
               onMouseMove={() => handleMouseMove(cell.id)}
             >
@@ -188,18 +209,19 @@ const CalendarPage: React.FC = () => {
         {rowSelectors && (
           <div className="calendar-row-selector-grid">
             {rowSelectors.map((row, index) => (
-              <Fragment key={`calendar-row-selector-${row}`}>
-                <label htmlFor={`calendar-row-selector-${row}`} hidden>
-                  Toggle Week {row + 1} Selection
+                <label
+                  key={`calendar-row-selector-${row}`}
+                  className="calendar-row-selector-label"
+                  htmlFor={`calendar-row-selector-${row}`}
+                >
+                  <input
+                    id={`calendar-row-selector-${row}`}
+                    type="checkbox"
+                    onChange={(e) => handleRowClick(row, e)}
+                    checked={rowSelectorsSelected[index]}
+                  />
+                  <span className="calendar-row-selector-checkmark"></span>
                 </label>
-                <input
-                  id={`calendar-row-selector-${row}`}
-                  className="calendar-row-selector"
-                  type="checkbox"
-                  onChange={(e) => handleRowClick(row, e)}
-                  checked={rowSelectorsSelected[index]}
-                ></input>
-              </Fragment>
             ))}
           </div>
         )}
