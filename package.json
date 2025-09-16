@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.47.0",
     "@daniel-szulc/react-weather-widget": "^1.1.1",
     "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^2.5.0",
