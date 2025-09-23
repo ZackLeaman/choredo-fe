@@ -223,6 +223,37 @@ export const fetchSignoutUser = createAsyncThunk<string, string>(
   }
 );
 
+export const fetchGroupUserTest = createAsyncThunk<string, string>(
+  "protected",
+  async (token, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND}/protected`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        method: "GET",
+      });
+      if (res) {
+        const resParse = await res.json();
+
+        if (resParse.error) {
+          throw new Error(resParse.error);
+        }
+
+        // TODO use resParse.data.session as well
+
+        console.log("HEYO", resParse.data);
+        return resParse.data;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Error fetch group users", error);
+      return rejectWithValue(error.toString());
+    }
+  }
+);
+
 export const userSlice = createAppSlice({
   name: "user",
   initialState,
