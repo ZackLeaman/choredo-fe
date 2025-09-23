@@ -4,8 +4,26 @@ import { FormSubmit } from "@/models";
 import { AsyncStatus } from "@/enums/asyncStatus";
 import { createAppSlice } from "@/store/createAppSlice";
 
+interface UserInfo {
+  id: string;
+  firstName: string;
+  lastName: string;
+  emails: string[];
+  imageUrl: string;
+}
+interface UserGroup {
+  group_id: string;
+  user_id: string;
+  group_name: string;
+  role: string;
+  status: string;
+}
 export interface UserSliceState {
-  data: { user: User; session: Session };
+  data: {
+    user: User;
+    userGroups: { userInfo: UserInfo[]; userGroups: UserGroup[] };
+    session: Session;
+  };
   status: AsyncStatus;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any;
@@ -26,6 +44,7 @@ const initialState: UserSliceState = {
       user_metadata: {},
       created_at: "",
     },
+    userGroups: { userInfo: [], userGroups: [] },
     session: {
       access_token: "",
       refresh_token: "",
@@ -254,6 +273,125 @@ export const fetchGroupUserTest = createAsyncThunk<string, string>(
   }
 );
 
+export const fetchUserGroups = createAsyncThunk<string, { token: string }>(
+  "group",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BACKEND}/group`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        method: "GET",
+      });
+      if (res) {
+        const resParse = await res.json();
+        return resParse.data;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Error fetch group users", error);
+      return rejectWithValue(error.toString());
+    }
+  }
+);
+
+export const fetchSendGroupInvite = createAsyncThunk<
+  string,
+  { token: string; groupId: string; email: string }
+>("group/invite", async ({ token, groupId, email }, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND}/group/invite`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ groupId, email }),
+      method: "POST",
+    });
+    if (res) {
+      const resParse = await res.json();
+
+      if (resParse.error) {
+        throw new Error(resParse.error);
+      }
+
+      // TODO use resParse.data.session as well
+
+      console.log("HEYO", resParse.data);
+      return resParse.data;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error("Error fetch group users", error);
+    return rejectWithValue(error.toString());
+  }
+});
+
+export const fetchCreateGroup = createAsyncThunk<
+  string,
+  { token: string; name: string }
+>("group", async ({ token, name }, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND}/group`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ name }),
+      method: "POST",
+    });
+    if (res) {
+      const resParse = await res.json();
+
+      if (resParse.error) {
+        throw new Error(resParse.error);
+      }
+
+      // TODO use resParse.data.session as well
+
+      console.log("HEYO", resParse.data);
+      return resParse.data;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error("Error fetch create group", error);
+    return rejectWithValue(error.toString());
+  }
+});
+
+export const fetchJoinGroup = createAsyncThunk<
+  string,
+  { token: string; groupId: string }
+>("group/join", async ({ token, groupId }, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND}/group/join`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ groupId }),
+      method: "POST",
+    });
+    if (res) {
+      const resParse = await res.json();
+
+      if (resParse.error) {
+        throw new Error(resParse.error);
+      }
+
+      // TODO use resParse.data.session as well
+
+      console.log("HEYO", resParse.data);
+      return resParse.data;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    console.error("Error joining group", error);
+    return rejectWithValue(error.toString());
+  }
+});
+
 export const userSlice = createAppSlice({
   name: "user",
   initialState,
@@ -282,6 +420,31 @@ export const userSlice = createAppSlice({
       })
       .addCase(
         fetchLogin.rejected,
+        (state: UserSliceState, action: PayloadAction<string>) => {
+          state.status = AsyncStatus.REJECTED;
+          state.error = action.payload.toString();
+        }
+      )
+      .addCase(
+        fetchUserGroups.fulfilled,
+        (
+          state: UserSliceState,
+          action: PayloadAction<{
+            userInfo: UserInfo[];
+            userGroups: UserGroup[];
+          }>
+        ) => {
+          state.data.userGroups = action.payload;
+          state.error = "";
+          state.status = AsyncStatus.SUCCESSFUL;
+        }
+      )
+      .addCase(fetchUserGroups.pending, (state: UserSliceState) => {
+        state.status = AsyncStatus.LOADING;
+        // state.data = { ...initialState.data };
+      })
+      .addCase(
+        fetchUserGroups.rejected,
         (state: UserSliceState, action: PayloadAction<string>) => {
           state.status = AsyncStatus.REJECTED;
           state.error = action.payload.toString();
@@ -362,6 +525,7 @@ export const userSlice = createAppSlice({
   },
   selectors: {
     selectUser: (user: UserSliceState) => user.data.user,
+    selectUserGroups: (user: UserSliceState) => user.data.userGroups,
     selectUserSession: (user: UserSliceState) => user.data.session,
     selectUserStatus: (user: UserSliceState) => user.status,
     selectUserError: (user: UserSliceState) => user.error,
@@ -371,6 +535,7 @@ export const userSlice = createAppSlice({
 export const { resetError } = userSlice.actions;
 export const {
   selectUser,
+  selectUserGroups,
   selectUserSession,
   selectUserStatus,
   selectUserError,

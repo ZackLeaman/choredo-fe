@@ -1,34 +1,136 @@
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchGroupUserTest, selectUser } from "@/slices";
+import { fetchCreateGroup, fetchJoinGroup, fetchSendGroupInvite, fetchUserGroups, selectUser, selectUserGroups } from "@/slices";
 import AuthedRoutes from "@/routes/authedRoutes.component";
 import UnauthedRoutes from "@/routes/unauthedRoutes.component";
-import { SignedIn, SignedOut, SignInButton, useAuth, UserButton } from '@clerk/clerk-react';
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  useAuth,
+  UserButton,
+} from "@clerk/clerk-react";
+import { useRef } from "react";
 
 function App() {
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-  const { getToken } = useAuth();
+  const { getToken, userId } = useAuth();
+  const groupIdRef = useRef(null);
+  const emailInputRef = useRef(null);
+  const emailConfirmInputRef = useRef(null);
+  const nameRef = useRef(null);
+  const userGroups = useSelector(selectUserGroups);
 
   const fetchTest = async () => {
     const token = await getToken();
-    dispatch(fetchGroupUserTest(token ?? '') as any);
+    dispatch(fetchUserGroups({ token: token ?? "" }) as any);
+  };
+
+  const sendGroupInvite = async (event) => {
+    event.preventDefault();
+
+    if (
+      groupIdRef.current?.value &&
+      groupIdRef.current?.value?.length > 0 &&
+      emailConfirmInputRef.current?.value &&
+      emailConfirmInputRef.current?.value?.length > 0 &&
+      emailConfirmInputRef.current?.value === emailInputRef.current?.value
+    ) {
+      const token = await getToken();
+      dispatch(
+        fetchSendGroupInvite({
+          token: token ?? "",
+          groupId: groupIdRef.current?.value ?? "",
+          email: emailInputRef.current?.value ?? "",
+        }) as any
+      );
+    } else {
+      // TODO form validation errors
+    }
+  };
+  const createGroupSubmit = async (event) => {
+    event.preventDefault();
+
+    if (
+      nameRef.current?.value &&
+      nameRef.current?.value?.length > 0
+    ) {
+      const token = await getToken();
+      dispatch(
+        fetchCreateGroup({
+          token: token ?? "",
+          name: nameRef.current?.value ?? "",
+        }) as any
+      );
+    } else {
+      // TODO form validation errors
+    }
+  };
+  const handleJoin = async (groupId: string) => {
+    const token = await getToken();
+    dispatch(
+      fetchJoinGroup({
+        token: token ?? "",
+        groupId
+      }) as any
+    );
   }
 
-  return <header>
-    <SignedOut>
-      <SignInButton />
-    </SignedOut>
-    <SignedIn>
-      <UserButton />
-      <button onClick={fetchTest}>Fetch Users Test</button>
-    </SignedIn>
-  </header>
+  const users = userGroups?.userGroups?.map(ug => ({
+    ...ug,
+    ...userGroups.userInfo.find(u => ug.user_id === u.id)
+  }))
 
-  if (user && user.aud === 'authenticated' && user.id) {
-    return <AuthedRoutes />
+  return (
+    <header>
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+        <form onSubmit={sendGroupInvite}>
+          <p>Send an invite to the group</p>
+          <div>
+            <label htmlFor="groupId">Group Id*</label>
+            <input id="groupId" type="text" ref={groupIdRef} required />
+          </div>
+          <div>
+            <label htmlFor="email">Email*</label>
+            <input id="email" type="email" ref={emailInputRef} required />
+          </div>
+          <div>
+            <label htmlFor="email-confirm">Confirm Email*</label>
+            <input
+              id="email-confirm"
+              type="email"
+              ref={emailConfirmInputRef}
+              required
+            />
+          </div>
+          <button type="submit">Send</button>
+        </form>
+        <ul>
+          {users?.map(u => (<li key={u.id}>
+            <span>{u.group_name} - {u.emails?.[0]} - {u.role} - {u.status}{u.id === userId && u.status === 'pending' && <button onClick={() => handleJoin(u.group_id)}>Join</button>}</span>
+          </li>))}
+        </ul>
+        <form onSubmit={createGroupSubmit}>
+          <div>
+            <label htmlFor="name">Name</label>
+            <input id="name" type="text" ref={nameRef} required />
+          </div>
+          <button type="submit">Create Group</button>
+        </form>
+        <button onClick={fetchTest}>Fetch Users Test</button>
+      </SignedIn>
+    </header>
+  );
+
+  if (user && user.aud === "authenticated" && user.id) {
+    return <AuthedRoutes />;
   }
-  
+
   return <UnauthedRoutes />;
 }
 
