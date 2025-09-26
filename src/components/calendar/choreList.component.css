@@ -1,0 +1,59 @@
+.chore-list {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 20rem;
+    background: white;
+    overflow: auto;
+
+    .card {
+        min-width: unset;
+        width: calc(100% - 1rem);
+        margin: 0.3rem 0.5rem 0 0.5rem;
+        background: rgb(55, 153, 188);
+        border-color: white;
+        box-shadow: none;
+    }
+
+    .content-columns {
+        border: 0.2rem solid rgb(55, 153, 188);
+        border-radius: 1rem;
+    }
+    
+    .dragging {
+        background: rgb(148, 173, 187);
+        border: 0.2rem dashed white;
+
+        &:hover {
+            background: rgb(209, 225, 234);
+        }
+    }
+
+    table {
+        width: 100%;
+        text-align: center;
+        overflow: auto;
+        border-collapse: separate;
+        border-spacing: 0;
+        position: relative;
+        z-index: 1;
+        background: rgb(55, 153, 188);
+    }
+
+    th {
+        height: 5rem;
+        width: 33%;
+        background: rgb(55, 153, 188);
+        position: sticky;
+        top: 0;
+        
+    }
+
+    td {
+        vertical-align: text-top;
+        height: 50rem;
+        width: 33%;
+        background: rgb(174, 206, 224);
+    }
+}

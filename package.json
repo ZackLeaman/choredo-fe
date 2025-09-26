@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@daniel-szulc/react-weather-widget": "^1.1.1",
+    "@hello-pangea/dnd": "^18.0.1",
     "@popperjs/core": "^2.11.8",
     "@reduxjs/toolkit": "^2.5.0",
     "@supabase/auth-ui-react": "^0.4.7",
