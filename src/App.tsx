@@ -1,6 +1,6 @@
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCreateGroup, fetchJoinGroup, fetchSendGroupInvite, fetchUserGroups, selectUser, selectUserGroups } from "@/slices";
+import { fetchCreateGroup, fetchJoinGroup, fetchSendGroupInvite, fetchSyncClerkUser, fetchUserGroups, selectUser, selectUserGroups } from "@/slices";
 import AuthedRoutes from "@/routes/authedRoutes.component";
 import UnauthedRoutes from "@/routes/unauthedRoutes.component";
 import {
@@ -10,7 +10,7 @@ import {
   useAuth,
   UserButton,
 } from "@clerk/clerk-react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 function App() {
   const user = useSelector(selectUser);
@@ -21,6 +21,17 @@ function App() {
   const emailConfirmInputRef = useRef(null);
   const nameRef = useRef(null);
   const userGroups = useSelector(selectUserGroups);
+
+  useEffect(() => {
+    console.log("HEYO")
+    const fetchSyncUser = async () => {
+      const token = await getToken();
+      if (token) {
+        dispatch(fetchSyncClerkUser({ token }) as any);
+      }
+    }
+    fetchSyncUser();
+  }, [])
 
   const fetchTest = async () => {
     const token = await getToken();

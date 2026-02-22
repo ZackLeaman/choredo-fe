@@ -101,7 +101,7 @@ export const fetchLogin = createAsyncThunk<User | null, { data: FormSubmit }>(
       }
     }
     return rejectWithValue("Error login: invalid params");
-  }
+  },
 );
 
 export const fetchSignup = createAsyncThunk<User | null, { data: FormSubmit }>(
@@ -133,7 +133,7 @@ export const fetchSignup = createAsyncThunk<User | null, { data: FormSubmit }>(
       }
     }
     return rejectWithValue("Error signup: invalid params");
-  }
+  },
 );
 
 export const fetchForgotPassword = createAsyncThunk<
@@ -150,7 +150,7 @@ export const fetchForgotPassword = createAsyncThunk<
           },
           method: "POST",
           body: JSON.stringify(data),
-        }
+        },
       );
       if (res) {
         const resParse = await res.json();
@@ -186,7 +186,7 @@ export const fetchUpdatePassword = createAsyncThunk<
           },
           method: "POST",
           body: JSON.stringify(data),
-        }
+        },
       );
       if (res) {
         const resParse = await res.json();
@@ -220,7 +220,7 @@ export const fetchSignoutUser = createAsyncThunk<string, string>(
               Authorization: `Bearer ${accessToken}`,
             },
             method: "POST",
-          }
+          },
         );
         if (res) {
           const resParse = await res.json();
@@ -239,7 +239,7 @@ export const fetchSignoutUser = createAsyncThunk<string, string>(
       }
     }
     return rejectWithValue("Error update password: invalid params");
-  }
+  },
 );
 
 export const fetchGroupUserTest = createAsyncThunk<string, string>(
@@ -270,7 +270,7 @@ export const fetchGroupUserTest = createAsyncThunk<string, string>(
       console.error("Error fetch group users", error);
       return rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const fetchUserGroups = createAsyncThunk<string, { token: string }>(
@@ -293,7 +293,7 @@ export const fetchUserGroups = createAsyncThunk<string, { token: string }>(
       console.error("Error fetch group users", error);
       return rejectWithValue(error.toString());
     }
-  }
+  },
 );
 
 export const fetchSendGroupInvite = createAsyncThunk<
@@ -392,6 +392,30 @@ export const fetchJoinGroup = createAsyncThunk<
   }
 });
 
+export const fetchSyncClerkUser = createAsyncThunk<string, { token: string }>(
+  "sync/user",
+  async ({ token }, { rejectWithValue }) => {
+    try {
+      console.log("HEYO YOYO");
+      const res = await fetch(`${import.meta.env.VITE_BACKEND}/user/sync`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        method: "POST",
+      });
+      if (res) {
+        const resParse = await res.json();
+        return resParse.data;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Error fetch sync user", error);
+      return rejectWithValue(error.toString());
+    }
+  },
+);
+
 export const userSlice = createAppSlice({
   name: "user",
   initialState,
@@ -407,12 +431,12 @@ export const userSlice = createAppSlice({
         fetchLogin.fulfilled,
         (
           state: UserSliceState,
-          action: PayloadAction<{ user: User; session: Session }>
+          action: PayloadAction<{ user: User; session: Session }>,
         ) => {
           state.data = action.payload;
           state.error = "";
           state.status = AsyncStatus.SUCCESSFUL;
-        }
+        },
       )
       .addCase(fetchLogin.pending, (state: UserSliceState) => {
         state.status = AsyncStatus.LOADING;
@@ -423,7 +447,7 @@ export const userSlice = createAppSlice({
         (state: UserSliceState, action: PayloadAction<string>) => {
           state.status = AsyncStatus.REJECTED;
           state.error = action.payload.toString();
-        }
+        },
       )
       .addCase(
         fetchUserGroups.fulfilled,
@@ -432,12 +456,12 @@ export const userSlice = createAppSlice({
           action: PayloadAction<{
             userInfo: UserInfo[];
             userGroups: UserGroup[];
-          }>
+          }>,
         ) => {
           state.data.userGroups = action.payload;
           state.error = "";
           state.status = AsyncStatus.SUCCESSFUL;
-        }
+        },
       )
       .addCase(fetchUserGroups.pending, (state: UserSliceState) => {
         state.status = AsyncStatus.LOADING;
@@ -448,7 +472,7 @@ export const userSlice = createAppSlice({
         (state: UserSliceState, action: PayloadAction<string>) => {
           state.status = AsyncStatus.REJECTED;
           state.error = action.payload.toString();
-        }
+        },
       )
       .addCase(
         fetchSignup.fulfilled,
@@ -458,7 +482,7 @@ export const userSlice = createAppSlice({
           // state.data = action.payload;
           state.error = "";
           state.status = AsyncStatus.SUCCESSFUL;
-        }
+        },
       )
       .addCase(fetchSignup.pending, (state: UserSliceState) => {
         state.status = AsyncStatus.LOADING;
@@ -469,7 +493,7 @@ export const userSlice = createAppSlice({
         (state: UserSliceState, action: PayloadAction<string>) => {
           state.status = AsyncStatus.REJECTED;
           state.error = action.payload.toString();
-        }
+        },
       )
       .addCase(fetchForgotPassword.fulfilled, (state: UserSliceState) => {
         state.data = { ...initialState.data };
@@ -486,7 +510,7 @@ export const userSlice = createAppSlice({
         (state: UserSliceState, action: PayloadAction<any>) => {
           state.status = AsyncStatus.REJECTED;
           state.error = action.payload;
-        }
+        },
       )
       .addCase(fetchUpdatePassword.fulfilled, (state: UserSliceState) => {
         state.data = { ...initialState.data };
@@ -503,7 +527,7 @@ export const userSlice = createAppSlice({
         (state: UserSliceState, action: PayloadAction<any>) => {
           state.status = AsyncStatus.REJECTED;
           state.error = action.payload;
-        }
+        },
       )
       .addCase(fetchSignoutUser.fulfilled, (state: UserSliceState) => {
         state.data = { ...initialState.data };
@@ -520,7 +544,25 @@ export const userSlice = createAppSlice({
         (state: UserSliceState, action: PayloadAction<any>) => {
           state.status = AsyncStatus.REJECTED;
           state.error = action.payload;
-        }
+        },
+      )
+      .addCase(fetchSyncClerkUser.fulfilled, (state: UserSliceState) => {
+        // TODO need to save in state that we did this already for this user so don't do again
+        state.data = { ...initialState.data };
+        state.error = "";
+        state.status = AsyncStatus.SUCCESSFUL;
+      })
+      .addCase(fetchSyncClerkUser.pending, (state: UserSliceState) => {
+        state.status = AsyncStatus.LOADING;
+        state.data = { ...initialState.data };
+      })
+      .addCase(
+        fetchSyncClerkUser.rejected,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (state: UserSliceState, action: PayloadAction<any>) => {
+          state.status = AsyncStatus.REJECTED;
+          state.error = action.payload;
+        },
       );
   },
   selectors: {
