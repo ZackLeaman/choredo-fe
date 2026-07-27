@@ -9,6 +9,7 @@ import {
   SignInButton,
   useAuth,
   UserButton,
+  useSession
 } from "@clerk/clerk-react";
 import { useEffect, useRef } from "react";
 
@@ -21,6 +22,7 @@ function App() {
   const emailConfirmInputRef = useRef(null);
   const nameRef = useRef(null);
   const userGroups = useSelector(selectUserGroups);
+  const { session } = useSession();
 
   useEffect(() => {
     console.log("HEYO")
@@ -29,6 +31,8 @@ function App() {
       if (token) {
         dispatch(fetchSyncClerkUser({ token }) as any);
       }
+      await setTimeout(() => session?.reload(), 10000);
+      window.alert("READY FOR GROUP CREATE")
     }
     fetchSyncUser();
   }, [])
@@ -67,7 +71,7 @@ function App() {
       nameRef.current?.value &&
       nameRef.current?.value?.length > 0
     ) {
-      const token = await getToken();
+      const token = await getToken({ skipCache: true });
       dispatch(
         fetchCreateGroup({
           token: token ?? "",
