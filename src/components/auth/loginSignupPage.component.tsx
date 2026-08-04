@@ -12,6 +12,7 @@ import {
 } from "@/slices";
 import { AsyncStatus } from "@/enums/asyncStatus";
 import { useEffect } from "react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 interface LoginSignupPageProps {
   isSignup?: boolean;
@@ -67,6 +68,12 @@ const LoginSignupPage: React.FC<LoginSignupPageProps> = ({ isSignup }) => {
 
   return (
     <div className="mt-20">
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
       <div className="flex flex-col gap-2 items-center justify-center">
         <img className="icon" src="/choredo-fe/creature-icon.jpg" />
         <h1 className="text-left">Choredos - {isSignup ? "Signup" : "Login"}</h1>

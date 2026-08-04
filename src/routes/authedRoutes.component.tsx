@@ -8,6 +8,8 @@ import { fetchSignoutUser, selectUserSession, selectUserStatus } from "@/slices"
 import { AsyncStatus } from "@/enums/asyncStatus";
 import AchievementsPage from "@/components/achievements/achievementsPage.component";
 import RewardModalComponent from "@/components/shared/rewardModal.component";
+import GroupsPage from "@/components/groups/groupsPage.component";
+import TestPage from "@/components/testPage.component";
 
 const AuthedRoutes: React.FC = () => {
   const dispatch = useDispatch();
@@ -29,7 +31,8 @@ const AuthedRoutes: React.FC = () => {
     <>
       <NavigationBar logout={logoutHandler} loading={loading === AsyncStatus.LOADING} />
       <Routes>
-        <Route path="/" element={<MyChoresPage />} />
+        <Route path="/" element={<TestPage />} />
+        <Route path="/groups" element={<GroupsPage />} />
         <Route path="/chores" element={<BrowseChoresPage />} />
         <Route path="/create-chore" element={<EditChoresPage />} />
         <Route path="/edit-chore/:id" element={<EditChoresPage />} />
